@@ -10,10 +10,15 @@ const Login = () => {
 
   const handleValidation = async () => {
     try {
-      const response = await axios.post('http://localhost:3000/api/auth/login', {
+      const response = await axios.post('http://localhost:5000/api/auth/login', {
         Username,
         Password,
-      });
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',}
+      }
+    );
 
       if (response.data.isValid) {
         setIsValid(true);
