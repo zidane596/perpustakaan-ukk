@@ -1,0 +1,82 @@
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+   "Username": "zizi",
+  "Password": "zizi",
+  "Email": "caca@example.com",
+  "Nama_Lengkap": "Test User",
+  "Alamat": "123 Test Street"
+}
+
+###
+
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "Username": "zizi",
+  "Password": "zizi"
+}
+
+
+###
+
+GET  http://localhost:3000/book/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzMzMzgsImlhdCI6MTczNjk5NDIxMSwiZXhwIjoxNzM3MDgwNjExfQ.79w7Ztb_CBjbTzxtS8qrSNitcoO-3F9TLaTBRGUJ1yI
+
+###
+
+GET http://localhost:3000/book/buku
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzMzMzgsImlhdCI6MTczNjk5NDIxMSwiZXhwIjoxNzM3MDgwNjExfQ.79w7Ztb_CBjbTzxtS8qrSNitcoO-3F9TLaTBRGUJ1yI
+
+###
+
+GET http://localhost:3000/book/buku
+Authorization: Bearer
+{
+  "id": 1
+}
+
+###
+
+POST http://localhost:3000/book/buku/buat
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzMzMzgsImlhdCI6MTczNzI3NDUzOCwiZXhwIjoxNzM3MzYwOTM4fQ.0oyh_wwHaVkYSKRZh1qnr1yy6M-fpnbKjRw3ae7wGLM
+Content-Type: application/json
+
+{
+  "BukuID": 1,
+  "Judul": "Mungkin Kita Sampai",
+  "Penulis": "Baskara Putra",
+  "Penerbit": "MediaBook",
+  "TahunTerbit": "2026"
+}
+
+###
+
+PUT http://localhost:3000/book/buku/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzMzMzgsImlhdCI6MTczNzI3NDUzOCwiZXhwIjoxNzM3MzYwOTM4fQ.0oyh_wwHaVkYSKRZh1qnr1yy6M-fpnbKjRw3ae7wGLM
+Content-Type: application/json
+
+{
+  "Judul": "kita Ke Sana",
+  "Penulis": "Baskara Putra",
+  "Penerbit": "Sun Eater",
+  "TahunTerbit": "2023"
+}
+
+###
+
+DELETE http://localhost:3000/book/buku/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzMzMzgsImlhdCI6MTczNzI3NDUzOCwiZXhwIjoxNzM3MzYwOTM4fQ.0oyh_wwHaVkYSKRZh1qnr1yy6M-fpnbKjRw3ae7wGLM
+
+###
+
+POST http://localhost:3000/auth/kategoribuku
+Authorization: Bearer
+
+###
+
+POST http://localhost:3000/auth/kategori_relasi
+Authorization: Bearer
+
