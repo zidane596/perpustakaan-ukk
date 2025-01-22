@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const bodyParser = require('body-parser');
 const authRoutes = require('./routes/Auth');
 const bukuRoutes = require('./routes/Buku');
@@ -8,13 +9,14 @@ dotenv.config();
 
 const app = express();
 app.use(bodyParser.json());
+app.use(cors());
 
 // Routes
-app.use('/auth', authRoutes);
-app.use('/buku', bukuRoutes);
-app.use('/kategori', kategoriRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/buku', bukuRoutes);
+app.use('/api/kategori', kategoriRoutes);
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
