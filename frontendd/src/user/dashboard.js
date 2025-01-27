@@ -1,12 +1,16 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
-import {Sidebar} from '../component/Sidebar.js';
+import jwt_decode from 'jwt-decode';
+import { Sidebar } from '../component/Sidebar.js';
 
 
 const Dashboard = () => {
     const [Name, setName] = useState('');
     const [Email, setEmail] = useState('');
     const [Buku, setBuku] = useState([]);
+    const token = localStorage.getItem('token');
+    const decodedtoken = jwt_decode(token);
+    const UserID= decodedtoken.id
 
 
     const handleLogout = () => {
@@ -16,13 +20,13 @@ const Dashboard = () => {
 
     const handleProfile = useCallback(async() => {
         try {
-            const response = await axios.get('http://localhost:5000/api/auth/profile',{
+            const response = await axios.get(`http://localhost:5000/api/user/${UserID}`,{
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json',
                 },
             });
-            setName(response.data.Name);
+            setName(response.data.Username);
             setEmail(response.data.Email);
         } catch (error) {
             console.error(error);

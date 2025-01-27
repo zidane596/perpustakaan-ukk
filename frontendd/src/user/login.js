@@ -36,6 +36,7 @@ const Login = () => {
       setIsValid(true)
       // Cek apakah login berhasil
       if (!!data) {
+        localStorage.setItem('token', data);
         navigate('/beranda'); // Navigasi ke dashboard
       } else {
         setIsValid(false);
