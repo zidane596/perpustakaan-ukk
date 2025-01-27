@@ -1,4 +1,4 @@
-POST http://localhost:3000/auth/register
+POST http://localhost:5000/auth/register
 Content-Type: application/json
 
 {
@@ -11,7 +11,7 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:5000/auth/login
+POST http://localhost:5000/api/auth/login
 Content-Type: application/json
 
 {
@@ -22,48 +22,50 @@ Content-Type: application/json
 
 ###
 
-GET  http://localhost:5000/book/me
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzMzMzgsImlhdCI6MTczNjk5NDIxMSwiZXhwIjoxNzM3MDgwNjExfQ.79w7Ztb_CBjbTzxtS8qrSNitcoO-3F9TLaTBRGUJ1yI
+GET  http://localhost:5000/api/buku
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzMzMzgsImlhdCI6MTczNzc4MDMwMywiZXhwIjoxNzM3ODY2NzAzfQ.y139OXS758kS0Nc8AWyJ5x7eBBQLaRuiAdGWt3ae408
+
 
 ###
 
-GET http://localhost:5000/book/buku
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzMzMzgsImlhdCI6MTczNjk5NDIxMSwiZXhwIjoxNzM3MDgwNjExfQ.79w7Ztb_CBjbTzxtS8qrSNitcoO-3F9TLaTBRGUJ1yI
+GET http://localhost:5000/api/buku/1111
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzMzMzgsImlhdCI6MTczNzc4MDMwMywiZXhwIjoxNzM3ODY2NzAzfQ.y139OXS758kS0Nc8AWyJ5x7eBBQLaRuiAdGWt3ae408
+
 
 ###
 
-GET http://localhost:5000/book/buku
-Authorization: Bearer
-{
-  "id": 1
-}
-
-###
-
-POST http://localhost:5000/book/buku/buat
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzMzMzgsImlhdCI6MTczNzI3NDUzOCwiZXhwIjoxNzM3MzYwOTM4fQ.0oyh_wwHaVkYSKRZh1qnr1yy6M-fpnbKjRw3ae7wGLM
+POST http://localhost:5000/api/buku/add
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzMzMzgsImlhdCI6MTczNzc4MDMwMywiZXhwIjoxNzM3ODY2NzAzfQ.y139OXS758kS0Nc8AWyJ5x7eBBQLaRuiAdGWt3ae408
 Content-Type: application/json
 
 {
-  "BukuID": 1,
-  "Judul": "Mungkin Kita Sampai",
-  "Penulis": "Baskara Putra",
-  "Penerbit": "MediaBook",
-  "TahunTerbit": "2026"
+  "BukuID": 1121,
+  "Judul" : "Ribuan Memori",
+  "Penulis" : "Lomba Sihir",
+  "Penerbit" : "Sun Eater",
+  "TahunTerbit" : 2022
+  
 }
 
 ###
 
-PUT http://localhost:5000/book/buku/1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzMzMzgsImlhdCI6MTczNzI3NDUzOCwiZXhwIjoxNzM3MzYwOTM4fQ.0oyh_wwHaVkYSKRZh1qnr1yy6M-fpnbKjRw3ae7wGLM
+PUT  http://localhost:5000/api/buku/1121
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzMzMzgsImlhdCI6MTczNzc4MDMwMywiZXhwIjoxNzM3ODY2NzAzfQ.y139OXS758kS0Nc8AWyJ5x7eBBQLaRuiAdGWt3ae408
 Content-Type: application/json
 
 {
-  "Judul": "kita Ke Sana",
-  "Penulis": "Baskara Putra",
-  "Penerbit": "Sun Eater",
-  "TahunTerbit": "2023"
+  "BukuID": 1121,
+  "Judul" : "Ribuan Memori",
+  "Penulis" : "Lomba Sihir",
+  "Penerbit" : "Sun Eater",
+  "TahunTerbit" : 2019
 }
+
+###
+
+DELETE  http://localhost:5000/api/buku/1121
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzMzMzgsImlhdCI6MTczNzc4MDMwMywiZXhwIjoxNzM3ODY2NzAzfQ.y139OXS758kS0Nc8AWyJ5x7eBBQLaRuiAdGWt3ae408
+
 
 ###
 

@@ -1,85 +1,155 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import bgku from '../imag/Group.png'
 
 const Login = () => {
   const [Username, setUsername] = useState('');
   const [Password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [isValid, setIsValid] = useState(null);
   const navigate = useNavigate();
 
-  const handleValidation = async () => {
-    try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', {
-        Username,
-        Password,
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',}
-      }
-    );
+  const handleShowPasswordChange = () => {
+    setShowPassword(!showPassword);
+  };
 
-      if (response.data.isValid) {
-        setIsValid(true);
-        navigate('/dashboard'); // Redirect ke dashboard jika berhasil login
+  const handleSubmit = async (event) => {
+    event.preventDefault(); // Mencegah form submit default
+    console.log({ Username, Password });
+
+    try {
+      const response = await axios.post(
+        'http://localhost:5000/api/auth/login',
+        {
+          Username,
+          Password,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      const data = response.data;
+      setIsValid(true)
+      // Cek apakah login berhasil
+      if (!!data) {
+        navigate('/beranda'); // Navigasi ke dashboard
       } else {
-        setIsValid(false); // Jika login gagal
+        setIsValid(false);
       }
     } catch (error) {
       console.error('Error during login:', error);
+      alert('Terjadi kesalahan pada server.');
     }
   };
 
   return (
-    <div className="flex flex-col md:flex-row h-screen">
-      <div className="w-full md:w-1/2 h-full bg-white flex flex-col items-center justify-center p-4">
-        <div className="flex flex-col w-full md:w-3/5 h-auto md:h-1/2">
-          <div>
-            <div className="title flex flex-col mb-4">
-              <span className="font-semibold font-['ubuntu'] text-4xl mb-1">Masuk</span>
-              <span className="font-normal font-['ubuntu'] text-gray-500 text-l">
-                Selamat datang kembali, silahkan mengisi Username dan Password Anda
-              </span>
+    <div className="flex flex-col md:flex-row h-screen bg-gradient-to-r from-blue-500 to-purple-600">
+      {/* Bagian Kiri */}
+      <div className="w-full md:w-1/2 flex flex-col justify-center items-center text-center text-white p-10" style={{ backgroundImage: `url(${bgku})`, backgroundSize: 'cover' }}>
+        <h1 className="text-4xl font-bold mb-4">Selamat Datang Di Perpustakaan Digital</h1>
+        <p className="text-lg">
+          Akses ribuan buku dari berbagai genre dan bidang. Bacalah kapan saja, di mana saja. Daftar atau masuk sekarang untuk menjelajahi dunia
+          pengetahuan tak terbatas dan temukan buku favoritmu.
+        </p>
+      </div>
+
+      {/* Bagian Kanan */}
+      <div className="w-full md:w-1/2 flex flex-col justify-center items-center bg-white p-10">
+        <div className="w-full max-w-sm">
+          <h2 className="text-xl font-bold text-center mb-6 text-blue-600">MASUK</h2>
+          <form onSubmit={handleSubmit}>
+            {/* Input Username */}
+            <div className="mb-4">
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Username"
+                  className="w-full bg-blue-100 rounded-full p-3 pl-10 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  value={Username}
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+                <span className="absolute left-3 top-3.5 text-blue-600">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="1.5"
+                    stroke="currentColor"
+                    className="w-5 h-5"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M15.75 9A3.75 3.75 0 1112 5.25 3.75 3.75 0 0115.75 9zm-9 9a6.75 6.75 0 0113.5 0v.75H6.75v-.75z"
+                    />
+                  </svg>
+                </span>
+              </div>
             </div>
-            <div className="form-group flex flex-col">
-              <label className="font-semibold mt-4 font-['ubuntu'] text-l mb-2">Username</label>
-              <input
-                type="text"
-                value={Username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="bg-blue-100 rounded-lg shadow-sm border border-gray-500 p-3 input font-['ubuntu']"
-                placeholder="Username"
-              />
-              {isValid === false && (
-                <span className="text-red-500">Username atau Password tidak valid</span>
-              )}
+
+            {/* Input Password */}
+            <div className="mb-4">
+              <div className="relative">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="Password"
+                  className="w-full bg-blue-100 rounded-full p-3 pl-10 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  value={Password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <span className="absolute left-3 top-3.5 text-blue-600">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="1.5"
+                    stroke="currentColor"
+                    className="w-5 h-5"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M3 9.75A6.75 6.75 0 0115 3c.7 0 1.37.1 2 .29m0 0l.01.01m-2-.3a6.733 6.733 0 011.15 10.84c-.4.5-.74.89-.74.89M8.25 15h-.38"
+                    />
+                  </svg>
+                </span>
+              </div>
+              <div className="flex items-center mt-2">
+                <input
+                  type="checkbox"
+                  id="showPassword"
+                  className="mr-2"
+                  checked={showPassword}
+                  onChange={handleShowPasswordChange}
+                />
+                <label htmlFor="showPassword" className="text-gray-600 text-sm">
+                  Tampilkan sandi
+                </label>
+              </div>
             </div>
-            <div className="form-group flex flex-col mt-4">
-              <label className="font-semibold mt-4 font-['ubuntu'] text-l mb-2">Password</label>
-              <input
-                type="password"
-                value={Password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="bg-blue-100 rounded-lg shadow-sm border border-gray-500 p-3 input font-['ubuntu']"
-                placeholder="Password"
-              />
-            </div>
-            <div className="mt-14 text-center">
+
+            {/* Tombol Login */}
+            <div className="text-center">
               <button
-                onClick={handleValidation}
-                className="mb-3 btn w-full bg-blue-600 text-white font-semibold font-['ubuntu'] text-l rounded-lg shadow-sm p-3"
+                type="submit"
+                className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold py-2 px-4 rounded-full hover:from-blue-600 hover:to-purple-700"
               >
-                Masuk
+                MASUK
               </button>
-              <span className="font-['ubuntu'] text-gray-500 text-l">
-                Masuk Sebagai Guru?
-                <a href="/login-guru" className="text-blue-600 text-l font-['ubuntu']">
-                  mampir sini
-                </a>
-              </span>
             </div>
-          </div>
+          </form>
+
+          {/* Link Daftar */}
+          <p className="mt-4 text-center text-gray-600">
+            Belum punya akun?{' '}
+            <a href="/registrasi" className="text-blue-500 hover:underline">
+              Sini daftar akun
+            </a>
+          </p>
         </div>
       </div>
     </div>

@@ -6,8 +6,9 @@ const router = express.Router();
 
 router.get('/buku', authenticateToken, getAllBuku);
 router.get('/buku/:id', authenticateToken, getBukuById);
-router.post('/buku/buat', authenticateToken, createBuku);
+router.post('/buku/add', authenticateToken, createBuku);
 router.put('/buku/:id', authenticateToken, updateBuku);
 router.delete('/buku/:id', authenticateToken, deleteBuku);
 
 module.exports = router;
+

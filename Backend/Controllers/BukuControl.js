@@ -63,29 +63,4 @@ const deleteBuku = async (req, res) => {
     }
 };
 
-const createulasanbuku = async (req, res) => {
-    const { UlasanID, BukuID, UserID, Ulasan, Rating } = req.body;
-    try {
-        const bukuData = await ulasanbuku.create({ UlasanID, BukuID, UserID, Ulasan, Rating });
-        res.status(201).json(bukuData);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-}
-
-const updateulasanbuku = async (req, res) => {
-    const { id } = req.params;
-    const { Ulasan, Rating } = req.body;
-    try {
-        const bukuData = await ulasanbuku.findOne({ where: { UlasanID: id } });
-        if (!bukuData) {
-            return res.status(404).json({ message: 'Buku not found' });
-        }
-        await bukuData.update({ Ulasan, Rating });
-        res.status(200).json(bukuData);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-}
-};
-
-module.exports = { getAllBuku, getBukuById, createBuku, updateBuku, deleteBuku, createulasanbuku, updateulasanbuku };
+module.exports = { getAllBuku, getBukuById, createBuku, updateBuku, deleteBuku };
