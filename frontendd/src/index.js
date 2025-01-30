@@ -3,15 +3,16 @@ import ReactDOM from 'react-dom/client'; // Menggunakan createRoot dari react-do
 import { BrowserRouter as Router } from 'react-router-dom'; // Tambahkan BrowserRouter di sini
 import './index.css';
 import App from './App';
+import { AuthProvider } from './context/auth';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root')); // createRoot digunakan di sini
 root.render(
-  <React.StrictMode>
+  <AuthProvider>
     <Router> {/* Membungkus App dengan BrowserRouter */}
       <App />
     </Router>
-  </React.StrictMode>
+  </AuthProvider>
 );
 
 reportWebVitals();

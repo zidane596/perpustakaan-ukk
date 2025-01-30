@@ -5,8 +5,9 @@ const { user, buku, koleksipribadi } = model.initModels(sequelize);
 
 
 const getUserProfile = async (req, res) => {
+    const userId = req.user.id; // Gunakan ID yang ada di dalam token
     try {
-        const profile = await user.findOne({ where: { UserID: req.params.id } });
+        const profile = await user.findOne({ where: { UserID: userId } });
         if (!profile) {
             return res.status(404).json({ message: 'User not found' });
         }

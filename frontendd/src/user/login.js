@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import bgku from '../imag/Group.png'
+import { useAuth } from '../context/auth';
 
 const Login = () => {
   const [Username, setUsername] = useState('');
@@ -9,13 +9,14 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isValid, setIsValid] = useState(null);
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleShowPasswordChange = () => {
     setShowPassword(!showPassword);
   };
 
   const handleSubmit = async (event) => {
-    event.preventDefault(); // Mencegah form submit default
+    event.preventDefault();
     console.log({ Username, Password });
 
     try {
@@ -34,10 +35,9 @@ const Login = () => {
 
       const data = response.data;
       setIsValid(true)
-      // Cek apakah login berhasil
       if (!!data) {
-        localStorage.setItem('token', data);
-        navigate('/beranda'); // Navigasi ke dashboard
+        login (data.token);
+        navigate('/beranda');
       } else {
         setIsValid(false);
       }
@@ -50,7 +50,7 @@ const Login = () => {
   return (
     <div className="flex flex-col md:flex-row h-screen bg-gradient-to-r from-blue-500 to-purple-600">
       {/* Bagian Kiri */}
-      <div className="w-full md:w-1/2 flex flex-col justify-center items-center text-center text-white p-10" style={{ backgroundImage: `url(${bgku})`, backgroundSize: 'cover' }}>
+      <div className="w-full md:w-1/2 flex flex-col justify-center items-center text-center text-white p-10" >
         <h1 className="text-4xl font-bold mb-4">Selamat Datang Di Perpustakaan Digital</h1>
         <p className="text-lg">
           Akses ribuan buku dari berbagai genre dan bidang. Bacalah kapan saja, di mana saja. Daftar atau masuk sekarang untuk menjelajahi dunia
@@ -92,7 +92,6 @@ const Login = () => {
               </div>
             </div>
 
-            {/* Input Password */}
             <div className="mb-4">
               <div className="relative">
                 <input
@@ -133,7 +132,7 @@ const Login = () => {
               </div>
             </div>
 
-            {/* Tombol Login */}
+
             <div className="text-center">
               <button
                 type="submit"
@@ -144,7 +143,6 @@ const Login = () => {
             </div>
           </form>
 
-          {/* Link Daftar */}
           <p className="mt-4 text-center text-gray-600">
             Belum punya akun?{' '}
             <a href="/registrasi" className="text-blue-500 hover:underline">

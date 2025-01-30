@@ -22,50 +22,61 @@ Content-Type: application/json
 
 ###
 
-GET  http://localhost:5000/api/buku
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzMzMzgsImlhdCI6MTczNzc4MDMwMywiZXhwIjoxNzM3ODY2NzAzfQ.y139OXS758kS0Nc8AWyJ5x7eBBQLaRuiAdGWt3ae408
+GET  http://localhost:5000/api/auth/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzMzMzgsInJvbGUiOjMsImlhdCI6MTczODAwNTMyOSwiZXhwIjoxNzM4MDkxNzI5fQ.dxLBf-UMRuRcjEZ2g5LAtsvq_Mk_KQWNAZj87x-su3w
 
 
 ###
 
-GET http://localhost:5000/api/buku/1111
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzMzMzgsImlhdCI6MTczNzc4MDMwMywiZXhwIjoxNzM3ODY2NzAzfQ.y139OXS758kS0Nc8AWyJ5x7eBBQLaRuiAdGWt3ae408
+
+GET  http://localhost:5000/api/user/33338
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzMzMzgsImlhdCI6MTczNzk3MTk4OSwiZXhwIjoxNzM4MDU4Mzg5fQ.rRCwtjc-Cmfk1rIUO9OVv-FE5af8zSoKK_OgGgVVbgY
+
+
+###
+GET  http://localhost:5000/api/buku
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzMzMzgsInJvbGUiOjMsImlhdCI6MTczODE5OTA0NCwiZXhwIjoxNzM4Mjg1NDQ0fQ.BsQDPZWttCEUSLGdB9vRn2r18l0WXrhfw52pXvD6Enk
+
+
+###
+
+GET http://localhost:5000/api/buku/1125
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzMzMzgsInJvbGUiOjMsImlhdCI6MTczODIxNzYwNywiZXhwIjoxNzM4MzA0MDA3fQ.JKGISwM3gEsVlpEizJBWcGxiBddf6wTWMP3146KSi74
 
 
 ###
 
 POST http://localhost:5000/api/buku/add
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzMzMzgsImlhdCI6MTczNzc4MDMwMywiZXhwIjoxNzM3ODY2NzAzfQ.y139OXS758kS0Nc8AWyJ5x7eBBQLaRuiAdGWt3ae408
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzMzMzgsInJvbGUiOjMsImlhdCI6MTczODIxNzYwNywiZXhwIjoxNzM4MzA0MDA3fQ.JKGISwM3gEsVlpEizJBWcGxiBddf6wTWMP3146KSi74
 Content-Type: application/json
 
 {
-  "BukuID": 1121,
-  "Judul" : "Ribuan Memori",
-  "Penulis" : "Lomba Sihir",
-  "Penerbit" : "Sun Eater",
-  "TahunTerbit" : 2022
+  "Judul" : "kiri",
+  "Penulis" : "kiri",
+  "Penerbit" : "kiri",
+  "TahunTerbit" : 2022,
+  "KategoriID": [1,3,4,5]
   
 }
 
 ###
 
-PUT  http://localhost:5000/api/buku/1121
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzMzMzgsImlhdCI6MTczNzc4MDMwMywiZXhwIjoxNzM3ODY2NzAzfQ.y139OXS758kS0Nc8AWyJ5x7eBBQLaRuiAdGWt3ae408
+PUT  http://localhost:5000/api/buku/1125
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzMzMzgsInJvbGUiOjMsImlhdCI6MTczODIxNzYwNywiZXhwIjoxNzM4MzA0MDA3fQ.JKGISwM3gEsVlpEizJBWcGxiBddf6wTWMP3146KSi74
 Content-Type: application/json
 
 {
-  "BukuID": 1121,
-  "Judul" : "Ribuan Memori",
-  "Penulis" : "Lomba Sihir",
-  "Penerbit" : "Sun Eater",
-  "TahunTerbit" : 2019
+  "Judul" : "kiri",
+  "Penulis" : "kiri",
+  "Penerbit" : "kiri",
+  "TahunTerbit" : 2022,
+  "KategoriID": [1,3,4,5]
 }
 
 ###
 
-DELETE  http://localhost:5000/api/buku/1121
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzMzMzgsImlhdCI6MTczNzc4MDMwMywiZXhwIjoxNzM3ODY2NzAzfQ.y139OXS758kS0Nc8AWyJ5x7eBBQLaRuiAdGWt3ae408
-
+DELETE  http://localhost:5000/api/buku/1120
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzMzMzgsInJvbGUiOjMsImlhdCI6MTczODAwNTMyOSwiZXhwIjoxNzM4MDkxNzI5fQ.dxLBf-UMRuRcjEZ2g5LAtsvq_Mk_KQWNAZj87x-su3w
 
 ###
 

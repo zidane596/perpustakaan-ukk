@@ -4,7 +4,7 @@ const { getUserProfile, updateUserProfile } = require('../Controllers/User.js');
 
 const router = express.Router();
 
-router.get('/user/:id', authenticateToken, getUserProfile);
+router.get('/user', authenticateToken, getUserProfile);
 router.put('/user/:id', authenticateToken, updateUserProfile);
 
 module.exports = router;
