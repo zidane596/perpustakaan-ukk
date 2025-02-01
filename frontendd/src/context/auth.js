@@ -1,8 +1,9 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 export const Role = {
-    Admin: "Admin",
-    User: "User",
+    Admin: "1",
+    Petugas: "2",
+    User: "3",
 };
 
 const AuthContext = createContext(undefined);
@@ -23,6 +24,7 @@ export const AuthProvider = ({ children }) => {
 
     const login = (token) => {
         setToken(token);
+        localStorage.setItem("Key_Token", token);
     };
 
     const logout = () => {
@@ -36,15 +38,28 @@ export const AuthProvider = ({ children }) => {
 
     const isRole = () => {
         if (token == null) return null;
-
+    
         try {
             const provider = JSON.parse(atob(token.split(".")[1]));
-            return provider["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+            console.log(provider);  // Debugging, lihat isi payload token
+    
+            // Mengambil role dari payload
+            const roleID = provider.role; // Pastikan untuk mengambil 'role' di sini
+            switch (roleID) {
+                case 1:
+                    return 'Admin';
+                case 2:
+                    return 'Petugas';
+                case 3:
+                    return 'User';
+                default:
+                    return null;
+            }
         } catch (error) {
             console.error('Format token tidak valid', error);
             return null;
         }
-    };
+    };  
 
     return (
         <AuthContext.Provider

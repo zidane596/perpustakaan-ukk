@@ -21,6 +21,14 @@ module.exports = function(sequelize, DataTypes) {
     TahunTerbit: {
       type: DataTypes.INTEGER,
       allowNull: false
+    },
+    Stok: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    Image: {
+      type: DataTypes.BLOB('long'),
+      allowNull: false
     }
   }, {
     sequelize,

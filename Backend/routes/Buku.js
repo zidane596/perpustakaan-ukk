@@ -8,9 +8,9 @@ const router = express.Router();
 router.get('/buku', authenticateToken, getAllBuku);
 router.get('/buku/:id', authenticateToken, getBukuById);
 router.get('/buku/search?search=:search', authenticateToken, getBukuSearch);
-router.post('/buku/add', authenticateToken, createBuku);
-router.put('/buku/:id', authenticateToken, updateBuku);
-router.delete('/buku/:id', authenticateToken, deleteBuku);
+router.post('/buku/add', authenticateToken,authorizeRoles('Admin',`Petugas`), createBuku);
+router.put('/buku/:id', authenticateToken,authorizeRoles('Admin',`Petugas`), updateBuku);
+router.delete('/buku/:id', authenticateToken,authorizeRoles('Admin',`Petugas`), deleteBuku);
 
 module.exports = router;
 

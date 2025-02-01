@@ -7,6 +7,7 @@ const kategoriRoutes = require('./routes/Kategori.js');
 const koleksiRoutes = require('./routes/KoleksiRout.js');
 const ulasanRoutes = require('./routes/UlasanRout.js');
 const userRoutes = require('./routes/UserRout.js');
+const peminjamanRoutes = require('./routes/PeminjamanRout.js');
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -22,6 +23,7 @@ app.use('/api', authRoutes);
 app.use('/api', bukuRoutes);
 app.use('/api', kategoriRoutes);
 app.use('/api', koleksiRoutes);
+app.use('/api', peminjamanRoutes);
 app.use('/api', ulasanRoutes);
 app.use('/api', userRoutes);
 

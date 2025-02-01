@@ -23,7 +23,7 @@ Content-Type: application/json
 ###
 
 GET  http://localhost:5000/api/auth/me
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzMzMzgsInJvbGUiOjMsImlhdCI6MTczODAwNTMyOSwiZXhwIjoxNzM4MDkxNzI5fQ.dxLBf-UMRuRcjEZ2g5LAtsvq_Mk_KQWNAZj87x-su3w
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTExMiwicm9sZSI6MSwiaWF0IjoxNzM4Mzg5MzA1LCJleHAiOjE3Mzg0NzU3MDV9.HrBF-NuI0gnipDdOP_qFL0wSrNLRV_7qvUQTzD5EJko
 
 
 ###
@@ -40,7 +40,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzMzMzgsInJvb
 
 ###
 
-GET http://localhost:5000/api/buku/1125
+GET http://localhost:5000/api/buku/1111
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzMzMzgsInJvbGUiOjMsImlhdCI6MTczODIxNzYwNywiZXhwIjoxNzM4MzA0MDA3fQ.JKGISwM3gEsVlpEizJBWcGxiBddf6wTWMP3146KSi74
 
 

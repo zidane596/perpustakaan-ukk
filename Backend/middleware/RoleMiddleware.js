@@ -1,12 +1,13 @@
 const authorizeRoles = (...allowedRoles) => {
     return (req, res, next) => {
-        const userRole = req.user.role; // role diambil dari payload JWT yang di-decode
+        const userRole = req.user.role;
         if (!allowedRoles.includes(userRole)) {
-            return res.status(403).json({ message: `Access denied. Your role is ${userRole} but required roles are ${allowedRoles.join(', ')}.` });
+            return res.status(403).json({
+                message: `Access Denied: Your role is ${userRole}. Allowed roles: ${allowedRoles.join(', ')}.`,
+            });
         }
-        next(); // Lanjutkan ke controller jika peran sesuai
+        next();
     };
 };
 
-module.exports = authorizeRoles;
-
+module.exports = authorizeRoles ;

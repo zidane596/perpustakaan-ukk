@@ -1,7 +1,7 @@
 const model = require('../model/init-models');
 const sequelize = require('../config/databases');
 const db = require('../config/databases');
-const { Op, where } = require('sequelize');
+const { Op } = require('sequelize');
 const { buku, ulasanbuku, kategoribuku, kategoribuku_relasi } = model.initModels(sequelize);
 
 const getAllBuku = async (req, res) => {
@@ -21,7 +21,7 @@ const getAllBuku = async (req, res) => {
                     ],
                 },
             ],
-            attributes: ["BukuID", "Judul", "Penulis", "Penerbit", "TahunTerbit"],
+            attributes: ["BukuID", "Judul", "Penulis", "Penerbit", "TahunTerbit", "Stok", "Image"],
             logging: console.log, // Tambahkan untuk debug
         });        
         res.status(200).json(bukuData);
@@ -50,7 +50,7 @@ const getBukuById = async (req, res) => {
                     ],
                 },
             ],
-            attributes: ["BukuID", "Judul", "Penulis", "Penerbit", "TahunTerbit"],
+            attributes: ["BukuID", "Judul", "Penulis", "Penerbit", "TahunTerbit", "Stok", "Image"],
          });
         if (!bukuData) {
             return res.status(404).json({ message: 'Buku not found' });
@@ -126,14 +126,14 @@ const createBuku = async (req, res) => {
 
 const updateBuku = async (req, res) => {
     const { id } = req.params;
-    const { Judul, Penulis, Penerbit, TahunTerbit, KategoriID } = req.body;
+    const { Judul, Penulis, Penerbit, TahunTerbit, Stok, Image, KategoriID } = req.body;
 
     try {
         const bukuData = await buku.findOne({ where: { BukuID: id } });
         if (!bukuData) {
             return res.status(404).json({ message: 'Buku not found' });
         }
-        await bukuData.update({ Judul, Penulis, Penerbit, TahunTerbit });
+        await bukuData.update({ Judul, Penulis, Penerbit, TahunTerbit, Stok, Image });
 
         if (Array.isArray(KategoriID) && KategoriID.length > 0) {
             // Validasi KategoriID
@@ -179,8 +179,6 @@ const updateBuku = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
-
-
 
 const deleteBuku = async (req, res) => {
     const { id } = req.params;
