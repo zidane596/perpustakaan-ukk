@@ -1,86 +1,100 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
-import { useAuth } from '../context/auth.js';  
+import { useAuth } from '../context/auth.js';
 import { Sidebar } from '../component/Sidebar.js';
-import { useNavigate } from 'react-router-dom';  
+import { Header } from '../component/Header.js';
+import { useNavigate } from 'react-router-dom';
 
 const DashboardUser = () => {
-    const { token, isLogin, isRole, logout } = useAuth(); 
+    const { token, isLogin, isRole, logout } = useAuth();
     const [user, setUser] = useState({});
-    const [buku, setBuku] = useState([]);
+    const [countBorrow, setCountBorrow] = useState(0);
+    const [historyBorrow, setHistoryBorrow] = useState([]);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        if (!isLogin) {
-            navigate('/login');
-        } else if (isRole !== 'User') {
-            logout();  // Logout if not a Petugas
-            navigate('/login');
-        } else {
-            // Fetch user and books when valid login with Petugas role
-            const fetchUser = async () => {
-                try {
-                    const response = await axios.get('http://localhost:5000/api/user', {
-                        headers: { Authorization: `Bearer ${token}` }
-                    });
-                    setUser(response.data); 
-                } catch (error) {
-                    console.error('Error fetching user:', error.message);
-                }
-            };
-
-            const fetchBuku = async () => {
-                try {
-                    const response = await axios.get('http://localhost:5000/api/buku', {
-                        headers: { Authorization: `Bearer ${token}` }
-                    });
-                    setBuku(response.data);
-                } catch (error) {
-                    console.error('Error fetching books:', error.message);
-                }
-            };
-
-            fetchUser();
-            fetchBuku();
+    const fetchCountBorrow = useCallback(async () => {
+        try {
+            const response = await axios.get('http://localhost:5000/api/countborrow', {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setCountBorrow(response.data.count || 0);
+        } catch (error) {
+            console.error('Error fetching count borrow:', error.message);
         }
-    }, [isLogin, isRole, token, logout, navigate]);
+    }, [token]);
+
+    const fetchHistoryBorrow = useCallback(async () => {
+        try {
+            const response = await axios.get('http://localhost:5000/api/historyborrow', {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            // Filter hanya yang statusnya selesai
+            const filteredHistory = response.data.filter(item => item.Status === 'Selesai');
+            setHistoryBorrow(filteredHistory);
+        } catch (error) {
+            console.error('Error fetching history borrow:', error.message);
+        }
+    }, [token]);
+
+    const fetchUser = useCallback(async () => {
+        try {
+            const response = await axios.get('http://localhost:5000/api/user', {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setUser(response.data);
+        } catch (error) {
+            console.error('Error fetching user:', error.message);
+        }
+    }, [token]);
+
+    useEffect(() => {
+        if (!isLogin || isRole !== 'User') {
+            logout();
+            navigate('/login');
+            return;
+        }
+        fetchUser();
+        fetchCountBorrow();
+        fetchHistoryBorrow();
+    }, [fetchUser, fetchCountBorrow, fetchHistoryBorrow, isLogin, isRole, logout, navigate]);
 
     return (
         <div className='flex flex-row h-screen w-screen'>
             <Sidebar />
-            <div className="flex flex-col flex-1 bg-blue-100">
-                <div className="flex items-center justify-between rounded-lg m-6 p-4 bg-white shadow-md">
-                    <div className="flex flex-col text-2xl font-semibold text-gray-800">
-                        {user.Username}
-                        <span className='text-gray-500 text-sm'>{user.Email}</span>
+            <div className="flex flex-col flex-1 bg-gray-50">
+                <Header user={user} logout={logout} />
+                <div className="flex flex-col p-6 gap-4">
+                    <div className='flex flex-row justify-between gap-4'>
+                        <div className="flex flex-col items-start bg-white shadow rounded-lg p-4 w-1/4">
+                            <p className="text-gray-800 font-medium">Jumlah Peminjaman: </p>
+                            <span className='text-2xl font-semibold'>{countBorrow}</span>
+                        </div>
                     </div>
-                    <button onClick={logout} className="px-4 py-2 bg-red-500 text-white rounded">
-                        Logout
-                    </button>
-                </div>
-                <div className="flex-1 p-6 bg-gray-50">
-                    {buku.length > 0 ? (
-                        <table className="table-fixed w-full">
-                            <thead>
-                                <tr>
-                                    <th className="px-4 py-2">Judul</th>
-                                    <th className="px-4 py-2">Pengarang</th>
-                                    <th className="px-4 py-2">Tahun</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {buku.map((book) => (
-                                    <tr key={book.ID}>
-                                        <td className="border px-4 py-2">{book.Judul}</td>
-                                        <td className="border px-4 py-2">{book.Penulis}</td>
-                                        <td className="border px-4 py-2">{book.TahunTerbit}</td>
+                    <div className="bg-white shadow rounded-lg p-6 mt-4">
+                        <h2 className="text-xl font-semibold text-gray-800 mb-4">Riwayat Peminjaman (Selesai)</h2>
+                        {historyBorrow.length > 0 ? (
+                            <table className="table-fixed w-full">
+                                <thead>
+                                    <tr>
+                                        <th className="px-4 py-2">Judul Buku</th>
+                                        <th className="px-4 py-2">Tanggal Peminjaman</th>
+                                        <th className="px-4 py-2">Tanggal Pengembalian</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    ) : (
-                        <p className="text-gray-600 text-center">Tidak ada data buku tersedia.</p>
-                    )}
+                                </thead>
+                                <tbody>
+                                    {historyBorrow.map((history) => (
+                                        <tr key={history.ID}>
+                                            <td className="border px-4 py-2">{history.JudulBuku}</td>
+                                            <td className="border px-4 py-2">{history.TanggalPinjam}</td>
+                                            <td className="border px-4 py-2">{history.TanggalKembali}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        ) : (
+                            <p className="text-gray-600 text-center">Tidak ada riwayat peminjaman selesai tersedia.</p>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>

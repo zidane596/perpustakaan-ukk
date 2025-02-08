@@ -6,27 +6,33 @@ const Akun = require("../imag/Akun.png");
 
 export const Admin = [
     {
-        key : 'beranda',
+        key : 'beranda admin',
         label : 'Beranda',
-        path : '/beranda',
-        icon : Beranda
+        path : '/beranda-admin',
+        icon : Beranda,
     },
     {
-        key : 'peminjaman',
+        key : 'peminjaman admin',
         label : 'Peminjaman',
-        path : '/peminjaman',
+        path : '/peminjaman-admin',
         icon : Peminjaman
     },
     {
-        key : 'daftar Buku',
+        key : 'daftar akun admin',
+        label : 'Daftar Akun',
+        path : '/daftar-user-admin',
+        icon : Akun
+    },
+    {
+        key : 'daftar buku admin',
         label : 'Daftar Buku',
-        path : '/daftar-buku',
+        path : '/daftar-buku-admin',
         icon : DaftarBuku
     },
     {
-        key : 'laporan',
+        key : 'laporan admin',
         label : 'Laporan',
-        path : '/laporan',
+        path : '/laporan-admin',
         icon : Laporan
     }
 
@@ -34,27 +40,53 @@ export const Admin = [
 
 export const User = [
     {
-        key : 'beranda',
+        key : 'beranda user',
         label : 'Beranda',
         path : '/beranda',
         icon : Beranda
     },
     {
-        key : 'peminjaman',
+        key : 'peminjaman user',
         label : 'Peminjaman',
         path : '/peminjaman',
         icon : Peminjaman
     },
     {
-        key : 'koleksi Buku',
+        key : 'koleksi buku user',
         label : 'Koleksi Buku',
         path : '/koleksi-buku',
         icon : DaftarBuku
     },
     {
-        key : 'akun',
+        key : 'akun user',
         label : 'Akun',
         path : '/akun',
+        icon : Akun
+    }
+]
+export const Petugas = [
+    {
+        key : 'beranda petugas',
+        label : 'Beranda',
+        path : '/beranda-petugas',  
+        icon : Beranda
+    },
+    {
+        key : 'peminjaman petugas',
+        label : 'Peminjaman',
+        path : '/peminjaman-petugas',
+        icon : Peminjaman
+    },
+    {
+        key : 'daftar buku petugas',
+        label : 'Koleksi Buku',
+        path : '/daftar-buku-petugas',
+        icon : DaftarBuku
+    },
+    {
+        key : 'akun petugas',
+        label : 'Akun',
+        path : '/akun-petugas',
         icon : Akun
     }
 ]

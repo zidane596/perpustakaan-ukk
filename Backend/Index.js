@@ -15,7 +15,8 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors({
     origin: 'http://localhost:3000',
-    methods: ['POST', 'GET','PUT', 'DELETE'], 
+    methods: ['POST', 'GET','PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'] 
 }));
 
 // Routes

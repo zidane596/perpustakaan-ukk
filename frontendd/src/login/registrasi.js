@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import bgku from '../imag/Group.png'
 
 const Registrasi = () => {
   const [Username, setUsername] = useState('');
@@ -44,7 +43,7 @@ const Registrasi = () => {
   return (
     <div className="flex flex-col md:flex-row h-screen bg-gradient-to-r from-blue-500 to-purple-600">
       {/* Bagian Kiri */}
-      <div className="w-full md:w-1/2 flex flex-col justify-center items-center text-center text-white p-10" style={{ backgroundImage: `url(${bgku})`, backgroundSize: 'cover' }}>
+      <div className="w-full md:w-1/2 flex flex-col justify-center items-center text-center text-white p-10" >
         <h1 className="text-4xl font-bold mb-4">Selamat Datang Di Perpustakaan Digital</h1>
         <p className="text-lg">
           Akses ribuan buku dari berbagai genre dan bidang. Bacalah kapan saja, di mana saja. Daftar atau masuk sekarang untuk menjelajahi dunia

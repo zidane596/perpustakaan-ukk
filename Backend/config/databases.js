@@ -6,8 +6,12 @@ const db = new Sequelize('perpus', 'root', '', {
 });
 
 db.authenticate()
+  // .then(() => {
+  //   console.log('Koneksi berhasil!');
+  //   return db.sync({ alter: true });
+  // })
   .then(() => {
-  console.log('Koneksi berhasil!');  
+    console.log('Koneksi berhasil!');
   })
   .catch(err => {
     console.error('Koneksi gagal:', err);

@@ -1,11 +1,51 @@
 const model = require('../model/init-models');
 const sequelize = require('../config/databases');
-const { user, buku, koleksipribadi } = model.initModels(sequelize);
+const bcrypt = require('bcrypt');
+const { Op } = require('sequelize');
+const { user, role } = model.initModels(sequelize);
 
 
+const getCountUser = async (req, res) => {
+    try {
+        const count = await user.count({
+            where: {
+                RoleID: {
+                    [Op.notIn]: ['1']
+                }
+            }
+        });
+
+        res.status(200).json({count});
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+
+const getAllUser = async (req, res) => {
+    try {
+        const users = await user.findAll({
+            where: {
+                RoleID: {
+                    [Op.notIn]: ['1']
+                }
+            },
+            include: [
+                {
+                    model: role,
+                    as: "Role",
+                    attributes: [ "RoleName"]
+                }
+            ],
+        });
+        res.status(200).json(users);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
 
 const getUserProfile = async (req, res) => {
-    const userId = req.user.id; // Gunakan ID yang ada di dalam token
+    const userId = req.user.id;
     try {
         const profile = await user.findOne({ where: { UserID: userId } });
         if (!profile) {
@@ -19,98 +59,36 @@ const getUserProfile = async (req, res) => {
 
 const updateUserProfile = async (req, res) => {
     const { id } = req.params;
-    const { Username, Password, Email, Nama_Lengkap, Alamat } = req.body;
+    const { Username, Email, Nama_Lengkap, Alamat, Password, RoleID } = req.body;
     try {
         const profile = await user.findOne({ where: { UserID: id } });
         if (!profile) {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        await profile.update({ Username, Password, Email, Nama_Lengkap, Alamat });
-        res.status(200).json({ message: 'Profile updated successfully', profile });
+        const updateuser = { Username, Email, Nama_Lengkap, Alamat, RoleID };
+        if (Password) {
+            const hashPassword = await bcrypt.hash(Password, 10);
+            updateuser.Password = hashPassword;
+        }
+        await profile.update(updateuser);
+        res.status(200).json({ updateuser });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
 
-// ------------------------------------------------------------- Koleksi Buku -------------------------------------------------------------
-
-const addKoleksiBuku = async (req, res) => {
-    try {
-        const UserID = req.user.id; // Ambil ID user dari session atau token
-        const { BukuID } = req.body;
-
-        // Validasi buku
-        const bukuExists = await buku.findByPk(BukuID);
-        if (!bukuExists) {
-            return res.status(404).json({ message: 'Buku tidak ditemukan' });
-        }
-
-        // Tambahkan ke koleksi
-        const [collection, created] = await koleksipribadi.findOrCreate({
-            where: { UserID, BukuID },
-            defaults: { UserID, BukuID },
-        });
-
-        if (!created) {
-            return res.status(400).json({ message: 'Buku sudah ada di koleksi' });
-        }
-
-        res.status(201).json({ message: 'Buku berhasil ditambahkan ke koleksi', collection });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
-
-const updateKoleksiBuku = async (req, res) => {
-    const { KoleksiID } = req.params;
-    const { BukuID } = req.body;
-    try {
-        const koleksi = await koleksipribadi.findOne({ where: { KoleksiID } });
-        if (!koleksi) {
-            return res.status(404).json({ message: 'Collection not found' });
-        }
-
-        await koleksi.update({ BukuID });
-        res.status(200).json({ message: 'Collection updated successfully', koleksi });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-} 
-
-const getUserKoleksi = async (req, res) => {
-    const { UserID } = req.params;
-
-    try {
-        const koleksi = await koleksipribadi.findAll({
-            where: { UserID },
-            include: [{ model: buku, attributes: ['id', 'title'] }],
-        });
-
-        if (!koleksi.length) {
-            return res.status(404).json({ message: 'Collection not found' });
-        }
-
-        res.status(200).json(koleksi);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
-
-const deleteKoleksiBuku = async (req, res) => {
+const deleteUser = async (req, res) => {
     const { id } = req.params;
-
     try {
-        const koleksi = await koleksipribadi.findOne({ where: { id } });
-        if (!koleksi) {
-            return res.status(404).json({ message: 'Collection not found' });
+        const respons = await user.findOne({ where: { UserID: id } });
+        if (!respons) {
+            return res.status(404).json({ message: 'User not found' });
         }
-
-        await koleksi.destroy();
-        res.status(200).json({ message: 'Collection deleted successfully' });
+        await respons.destroy();
+        res.status(200).json({ message: 'User deleted successfully' });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
-};
-
-module.exports = { getUserProfile, updateUserProfile, addKoleksiBuku, getUserKoleksi, updateKoleksiBuku, deleteKoleksiBuku };
+}
+module.exports = { getCountUser, getAllUser, getUserProfile, updateUserProfile, deleteUser };

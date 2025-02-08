@@ -2,6 +2,7 @@ const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('buku', {
     BukuID: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
@@ -26,10 +27,6 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    Image: {
-      type: DataTypes.BLOB('long'),
-      allowNull: false
-    }
   }, {
     sequelize,
     tableName: 'buku',

@@ -29,8 +29,15 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTExMiwicm9sZ
 ###
 
 
-GET  http://localhost:5000/api/user/33338
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzMzMzgsImlhdCI6MTczNzk3MTk4OSwiZXhwIjoxNzM4MDU4Mzg5fQ.rRCwtjc-Cmfk1rIUO9OVv-FE5af8zSoKK_OgGgVVbgY
+GET  http://localhost:5000/api/countuser
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTExMiwicm9sZSI6MSwiaWF0IjoxNzM4OTQ0NjU5LCJleHAiOjE3MzkwMzEwNTl9.COQ4B-_Nai3n4HaPP1V-rJbxJFM1wUvhB_zjutN6XS0
+
+
+###
+
+
+GET  http://localhost:5000/api/alluser
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTExMiwicm9sZSI6MSwiaWF0IjoxNzM4OTkzODQxLCJleHAiOjE3MzkwODAyNDF9.JWEhSUdVJrCwCrmX7LfUcxrLn5TQGCYJMmsk0w77pcw
 
 
 ###
@@ -41,13 +48,13 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzMzMzgsInJvb
 ###
 
 GET http://localhost:5000/api/buku/1111
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzMzMzgsInJvbGUiOjMsImlhdCI6MTczODIxNzYwNywiZXhwIjoxNzM4MzA0MDA3fQ.JKGISwM3gEsVlpEizJBWcGxiBddf6wTWMP3146KSi74
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTExMiwicm9sZSI6MSwiaWF0IjoxNzM4NjMxNDYzLCJleHAiOjE3Mzg3MTc4NjN9.jCjqoWu4jdQL5vQFY907kp2SoRaQD_DH4i-zao6nvgk
 
 
 ###
 
 POST http://localhost:5000/api/buku/add
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzMzMzgsInJvbGUiOjMsImlhdCI6MTczODIxNzYwNywiZXhwIjoxNzM4MzA0MDA3fQ.JKGISwM3gEsVlpEizJBWcGxiBddf6wTWMP3146KSi74
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTExMiwicm9sZSI6MSwiaWF0IjoxNzM4OTQ0NjU5LCJleHAiOjE3MzkwMzEwNTl9.COQ4B-_Nai3n4HaPP1V-rJbxJFM1wUvhB_zjutN6XS0
 Content-Type: application/json
 
 {
@@ -55,7 +62,8 @@ Content-Type: application/json
   "Penulis" : "kiri",
   "Penerbit" : "kiri",
   "TahunTerbit" : 2022,
-  "KategoriID": [1,3,4,5]
+  "Stok" : 11,
+  "KategoriID": [1,3]
   
 }
 
@@ -75,13 +83,27 @@ Content-Type: application/json
 
 ###
 
-DELETE  http://localhost:5000/api/buku/1120
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzMzMzgsInJvbGUiOjMsImlhdCI6MTczODAwNTMyOSwiZXhwIjoxNzM4MDkxNzI5fQ.dxLBf-UMRuRcjEZ2g5LAtsvq_Mk_KQWNAZj87x-su3w
+GET   http://localhost:5000/api/countborrow
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTExMiwicm9sZSI6MSwiaWF0IjoxNzM4OTQ0NjU5LCJleHAiOjE3MzkwMzEwNTl9.COQ4B-_Nai3n4HaPP1V-rJbxJFM1wUvhB_zjutN6XS0
+###
+
+GET   http://localhost:5000/api/borrow/1114
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTExMiwicm9sZSI6MSwiaWF0IjoxNzM4NjMxNDYzLCJleHAiOjE3Mzg3MTc4NjN9.jCjqoWu4jdQL5vQFY907kp2SoRaQD_DH4i-zao6nvgk
 
 ###
 
-DELETE http://localhost:5000/book/buku/1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzMzMzgsImlhdCI6MTczNzI3NDUzOCwiZXhwIjoxNzM3MzYwOTM4fQ.0oyh_wwHaVkYSKRZh1qnr1yy6M-fpnbKjRw3ae7wGLM
+PUT   http://localhost:5000/api/borrow/1114
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTExMiwicm9sZSI6MSwiaWF0IjoxNzM4NjMxNDYzLCJleHAiOjE3Mzg3MTc4NjN9.jCjqoWu4jdQL5vQFY907kp2SoRaQD_DH4i-zao6nvgk
+Content-Type: application/json
+
+{
+  "PeminjamanID" : 1116
+}
+
+###
+
+DELETE http://localhost:5000/api/buku/1112
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTExMiwicm9sZSI6MSwiaWF0IjoxNzM4OTAwNzQwLCJleHAiOjE3Mzg5ODcxNDB9.Vtkx-PAiOA9DXiDJ_n0Eb4zy3qgDixb48qXkfINC50c
 
 ###
 
@@ -93,3 +115,17 @@ Authorization: Bearer
 POST http://localhost:5000/auth/kategori_relasi
 Authorization: Bearer
 
+###
+
+PUT  http://localhost:5000/api/user/1111
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTExMiwicm9sZSI6MSwiaWF0IjoxNzM4NzU4MDQ0LCJleHAiOjE3Mzg4NDQ0NDR9.pLDQteP5_qZGE2-_H5ef-4E25sGlworY7adpn4hOsnM
+Content-Type: application/json
+
+{
+  "Username" : "3",
+  "Password" : "3",
+  "Email" : "3@gmail.com",
+  "Nama_Lengkap" : "3",
+  "Alamat" : "3",
+  "RoleID": 3
+}

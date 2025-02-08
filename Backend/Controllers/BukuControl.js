@@ -2,7 +2,26 @@ const model = require('../model/init-models');
 const sequelize = require('../config/databases');
 const db = require('../config/databases');
 const { Op } = require('sequelize');
-const { buku, ulasanbuku, kategoribuku, kategoribuku_relasi } = model.initModels(sequelize);
+const { buku, kategoribuku, kategoribuku_relasi } = model.initModels(sequelize);
+
+
+const getCountBuku = async (req, res) => {
+    try {
+        const count = await buku.count();
+        res.status(200).json({ count });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
+
+const getCountStock = async (req, res) => {
+    try {
+        const count = await buku.sum('Stok');
+        res.status(200).json({ count });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
 
 const getAllBuku = async (req, res) => {
     try {
@@ -21,7 +40,7 @@ const getAllBuku = async (req, res) => {
                     ],
                 },
             ],
-            attributes: ["BukuID", "Judul", "Penulis", "Penerbit", "TahunTerbit", "Stok", "Image"],
+            attributes: ["BukuID", "Judul", "Penulis", "Penerbit", "TahunTerbit", "Stok"],
             logging: console.log, // Tambahkan untuk debug
         });        
         res.status(200).json(bukuData);
@@ -29,7 +48,6 @@ const getAllBuku = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
-
 
 const getBukuById = async (req, res) => {
     const { id } = req.params;
@@ -61,64 +79,47 @@ const getBukuById = async (req, res) => {
     }
 };
 
-const getBukuSearch = async (req, res) => {
-    const { q, kategori } = req.query; // Mengambil parameter dari query string
-    try {
-        let whereConditions = {
-            [Op.or]: [
-                { Judul: { [Op.like]: `%${q}%` } }, // Mencari berdasarkan Judul
-                { Penulis: { [Op.like]: `%${q}%` } }, // Mencari berdasarkan Penulis
-                { Penerbit: { [Op.like]: `%${q}%` } }, // Mencari berdasarkan Penerbit
-            ],
-        };
-
-        // Jika kategori dipilih, tambahkan filter kategori
-        if (kategori) {
-            whereConditions.KategoriID = kategori;
-        }
-
-        const bukuData = await buku.findAll({
-            where: whereConditions,
-        });
-
-        res.status(200).json(bukuData); // Mengirim data buku yang ditemukan
-    } catch (error) {
-        res.status(500).json({ error: error.message }); // Menangani error
-    }
-};
-
-
 
 const createBuku = async (req, res) => {
-    const { Judul, Penulis, Penerbit, TahunTerbit, KategoriID } = req.body;
-
+    const { Judul, Penulis, Penerbit, TahunTerbit, Stok, KategoriID } = req.body;
     try {
-        const [result] = await db.query('SELECT MAX(BukuID) AS maxId FROM buku');
-        const maxId = result[0]?.maxId || 0;
-        const BukuID = maxId + 1;
-
+        // 1. Buat buku baru
         const newBuku = await buku.create({
-            BukuID,
             Judul,
             Penulis,
             Penerbit,
             TahunTerbit,
+            Stok,
         });
 
+        // 2. Jika KategoriID disertakan, tambahkan relasi kategori
         if (Array.isArray(KategoriID) && KategoriID.length > 0) {
-            const kategoriRelasi = KategoriID.map((id) => ({
-                BukuID: newBuku.BukuID,
-                KategoriID: id,
-            }));
+            // Validasi KategoriID
+            const kategoriExists = await kategoribuku.findAll({
+                where: { KategoriID: KategoriID },
+                attributes: ['KategoriID'],
+            });
+            const existingKategoriIDs = kategoriExists.map((kategori) => kategori.KategoriID);
 
+            if (existingKategoriIDs.length !== KategoriID.length) {
+                return res.status(400).json({ message: 'One or more KategoriID do not exist' });
+            }
+
+            // Tambahkan relasi ke tabel kategoribuku_relasi
+            const kategoriRelasi = KategoriID.map((kategori) => ({
+                BukuID: newBuku.BukuID,
+                KategoriID: kategori,
+            }));
             await kategoribuku_relasi.bulkCreate(kategoriRelasi);
         }
 
+        // 3. Kirim respon sukses
         res.status(201).json({
             message: 'Buku berhasil dibuat',
             buku: newBuku,
         });
     } catch (error) {
+        console.error(error);
         res.status(500).json({ error: error.message });
     }
 };
@@ -183,10 +184,23 @@ const updateBuku = async (req, res) => {
 const deleteBuku = async (req, res) => {
     const { id } = req.params;
     try {
-        const bukuData = await buku.findByPk(id);
+        const bukuData = await buku.findOne({
+            where: { BukuID: id },
+            include: [{
+                model: kategoribuku_relasi,
+                as: "kategoribuku_relasis",
+                attributes: ["KategoriID"],
+            }]
+        });
+        
         if (!bukuData) {
             return res.status(404).json({ message: 'Buku not found' });
         }
+        
+        if (bukuData.kategoribuku_relasis.length > 0) {
+            await kategoribuku_relasi.destroy({ where: { BukuID: id } });
+        }
+        
         await bukuData.destroy();
         res.status(200).json({ message: 'Buku deleted successfully' });
     } catch (error) {
@@ -194,4 +208,4 @@ const deleteBuku = async (req, res) => {
     }
 };
 
-module.exports = { getAllBuku, getBukuById, getBukuSearch, createBuku, updateBuku, deleteBuku };
+module.exports = { getCountStock, getCountBuku, getAllBuku, getBukuById, createBuku, updateBuku, deleteBuku };

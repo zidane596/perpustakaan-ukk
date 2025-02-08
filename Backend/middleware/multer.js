@@ -1,31 +1,26 @@
 const multer = require('multer');
 const path = require('path');
 
-// Menentukan lokasi penyimpanan gambar
+// Konfigurasi penyimpanan
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'uploads/'); // Menyimpan gambar di folder 'uploads'
+        cb(null, 'uploads/'); // Folder tempat file disimpan
     },
     filename: (req, file, cb) => {
-        cb(null, Date.now() + path.extname(file.originalname)); // Menyimpan dengan nama unik
-    }
+        cb(null, `${Date.now()}-${file.originalname}`);
+    },
 });
 
-// Menentukan filter untuk hanya menerima file gambar
+// Filter file untuk memastikan hanya gambar diterima
 const fileFilter = (req, file, cb) => {
-    const filetypes = /jpeg|jpg|png|gif/;
-    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-    const mimetype = filetypes.test(file.mimetype);
-    
-    if (extname && mimetype) {
-        return cb(null, true);
+    if (file.mimetype.startsWith('image/')) {
+        cb(null, true); // Terima file
     } else {
-        cb(new Error('Hanya file gambar yang diizinkan'), false);
+        cb(new Error('File harus berupa gambar!'), false); // Tolak file
     }
 };
 
-// Membuat middleware multer
-const upload = multer({
-    storage: storage,
-    fileFilter: fileFilter
-});
+// Inisialisasi Multer
+const upload = multer({ storage, fileFilter });
+
+module.exports = upload;

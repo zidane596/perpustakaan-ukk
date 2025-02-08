@@ -3,25 +3,54 @@ const sequelize = require('../config/databases');
 const db = require('../config/databases');
 const { peminjaman, user, buku } = model.initModels(sequelize);
 
-const getBorrow = async (req, res) => {
-    try {
-      const respons = await peminjaman.findAll({});
-      res.status(200).json({ respons });
-    } catch (err) {
-      res.status(500).json({ message: 'Server error', error: err.message });
-    }
+const getCountBorrow = async (req, res) => {
+  try {
+    const count = await peminjaman.count({});
+    res.status(200).json({count});
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
 }
 
-// Membuat peminjaman
+const getBorrow = async (req, res) => {
+  try {
+    const borrowRecords = await peminjaman.findAll({
+      include: [
+        { model: user, as: 'User', attributes: ['Username'] },
+        { model: buku, as: 'Buku', attributes: ['Judul'] },
+      ],
+      order: [['StatusPeminjaman', 'DESC']],
+    });
+    res.status(200).json(borrowRecords);
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+}
+
+const getBorrowByUser = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const respons = await peminjaman.findAll({
+      where: {
+        UserID: id,
+        StatusPeminjaman: 'Pinjam'
+      },
+      include: [
+        { model: user, as: 'User', attributes: ['Username'] },
+        { model: buku, as: 'Buku', attributes: ['Judul'] },
+      ],
+    });
+    res.status(200).json(respons);
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+}
+
 const addBorrow = async (req, res) => {
   const { UserID, BukuID, TanggalPeminjaman, TanggalPengembalian, StatusPeminjaman } = req.body;
 
-  if (!UserID || !BukuID || !TanggalPeminjaman || !TanggalPengembalian || !StatusPeminjaman) {
-    return res.status(400).json({ message: 'All fields are required' });
-  }
-
   try {
-    const loan = await peminjaman.create({
+    const respons = await peminjaman.create({
       UserID,
       BukuID,
       TanggalPeminjaman,
@@ -29,33 +58,42 @@ const addBorrow = async (req, res) => {
       StatusPeminjaman,
     });
 
-    res.status(201).json({ message: 'Loan created successfully', loan });
+    res.status(201).json(respons);
   } catch (err) {
     res.status(500).json({ message: 'Server error', error: err.message });
   }
 };
 
-// Mengembalikan buku
-const updateReturnBook = async (req, res) => {
-  const { loanId } = req.params;
+const updateReturnBookByid = async (req, res) => {
+  const { id } = req.params;
+  const { PeminjamanID, TanggalPengembalian, StatusPeminjaman } = req.body;
 
   try {
-    const loan = await peminjaman.findByPk(loanId);
+    const respons = await peminjaman.findOne({
+      where: {
+        UserID: id,
+        PeminjamanID,
+        StatusPeminjaman: 'Pinjam'
+      },
+    });
 
-    if (!loan) {
-      return res.status(404).json({ message: 'Loan not found' });
+    if (!respons) {
+      return res.status(404).json({ message: 'Peminjaman tidak ditemukan' });
     }
 
-    loan.StatusPeminjaman = 'returned';
-    await loan.save();
+    const today = new Date()
+    await respons.update({
+      TanggalPengembalian: today,
+      StatusPeminjaman: 'Selesai',
+    });
 
-    res.status(200).json({ message: 'Book returned successfully', loan });
-  } catch (err) {
+    res.status(200).json({ message: 'Peminjaman berhasil dikembalikan', respons });
+  }
+  catch (err) {
     res.status(500).json({ message: 'Server error', error: err.message });
   }
-};
+}
 
-// Melihat riwayat peminjaman berdasarkan UserID
 const getHistory = async (req, res) => {
   const { userId } = req.params;
 
@@ -78,4 +116,4 @@ const getHistory = async (req, res) => {
   }
 };
 
-module.exports = { getBorrow, addBorrow, updateReturnBook, getHistory };
+module.exports = { getCountBorrow, getBorrow, getBorrowByUser, addBorrow, updateReturnBookByid, getHistory };

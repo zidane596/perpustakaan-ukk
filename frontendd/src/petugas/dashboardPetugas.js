@@ -1,90 +1,115 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
-import { useAuth } from '../context/auth.js';  
+import { useAuth } from '../context/auth.js';
 import { Sidebar } from '../component/Sidebar.js';
-import { useNavigate } from 'react-router-dom';  
+import { Header } from '../component/Header.js';
+import { useNavigate } from 'react-router-dom';
 
-const DashboardPetugas = () => {
-    const { token, isLogin, isRole, logout } = useAuth(); 
+const Dashboard = () => {
+    const { token, isLogin, isRole, logout } = useAuth();
     const [user, setUser] = useState({});
-    const [buku, setBuku] = useState([]);
+    const [countUser, setCountUser] = useState(0);
+    const [countBorrow, setCountBorrow] = useState(0);
+    const [countBuku, setCountBuku] = useState(0);
+    const [countStok, setCountStok] = useState(0);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        if (!isLogin) {
-            navigate('/login');
-        } else if (isRole !== 'Petugas') {
-            logout();  // Logout if not a Petugas
-            navigate('/login');
-        } else {
-            // Fetch user and books when valid login with Petugas role
-            const fetchUser = async () => {
-                try {
-                    const response = await axios.get('http://localhost:5000/api/user', {
-                        headers: { Authorization: `Bearer ${token}` }
-                    });
-                    setUser(response.data); 
-                } catch (error) {
-                    console.error('Error fetching user:', error.message);
-                }
-            };
 
-            const fetchBuku = async () => {
-                try {
-                    const response = await axios.get('http://localhost:5000/api/buku', {
-                        headers: { Authorization: `Bearer ${token}` }
-                    });
-                    setBuku(response.data);
-                } catch (error) {
-                    console.error('Error fetching books:', error.message);
-                }
-            };
-
-            fetchUser();
-            fetchBuku();
+    const countuser = async () => {
+        try {
+            const response = await axios.get('http://localhost:5000/api/countuser', {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setCountUser(response.data.count || 0);
+        } catch (error) {
+            console.error('Error count user:', error.message);
         }
-    }, [isLogin, isRole, token, logout, navigate]);
+    };
+
+    const countborrow = useCallback(async () => {
+        try {
+            const response = await axios.get('http://localhost:5000/api/countborrow', {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setCountBorrow(response.data.count || 0);
+        } catch (error) {
+            console.error('Error count borrow:', error.message);
+        }
+    }, [token]);
+
+    const countbuku = async () => {
+        try {
+            const respons = await axios.get('http://localhost:5000/api/countbuku', {
+                headers: { Authorization: `Bearer ${token}` }
+            })
+            setCountBuku(respons.data.count || 0);
+        } catch (error) {
+            console.error('Error count buku:', error.message);
+        }
+    }
+
+    const countstok = async () => {
+        try {
+            const response = await axios.get('http://localhost:5000/api/countstok', {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setCountStok(response.data.count || 0);
+        } catch (error) {
+            console.error('Error count stok:', error.message);
+        }
+    }
+
+    const fetchUser = useCallback(async () => {
+        try {
+            const response = await axios.get('http://localhost:5000/api/user', {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setUser(response.data);
+        } catch (error) {
+            console.error('Error fetching user:', error.message);
+        }
+    }, [token]);
+
+    useEffect(() => {
+        if (!isLogin || isRole !== 'Petugas') {
+            navigate('/login');
+            return;
+        } 
+        fetchUser();
+        countuser();
+        countborrow();
+        countbuku();
+        countstok();
+    }, [fetchUser, countBorrow, countBuku, countStok, countUser, isLogin, isRole, navigate]);
 
     return (
         <div className='flex flex-row h-screen w-screen'>
             <Sidebar />
-            <div className="flex flex-col flex-1 bg-blue-100">
-                <div className="flex items-center justify-between rounded-lg m-6 p-4 bg-white shadow-md">
-                    <div className="flex flex-col text-2xl font-semibold text-gray-800">
-                        {user.Username}
-                        <span className='text-gray-500 text-sm'>{user.Email}</span>
+            <div className="flex flex-col flex-1 bg-gray-50">
+                <Header user={user} logout={logout} />
+                <div className="flex flex-col p-6 gap-4 ">
+                    <div className='flex flex-row justify-between gap-4'>
+                        <div className="flex flex-col items-start bg-white shadow rounded-lg p-4 w-1/4">
+                            <p className="text-gray-800 font-medium">Jumlah Pengguna: </p>
+                            <span className='text-2xl font-semibold'>{countUser}</span>
+                        </div>
+                        <div className="flex flex-col items-start bg-white shadow rounded-lg p-4 w-1/4">
+                            <p className="text-gray-800 font-medium">Jumlah Peminjaman: </p>
+                            <span className='text-2xl font-semibold'>{countBorrow}</span>
+                        </div>
+                        <div className="flex flex-col items-start bg-white shadow rounded-lg p-4 w-1/4">
+                            <p className="text-gray-800 font-medium">Jumlah Buku: </p>
+                            <span className='text-2xl font-semibold'>{countBuku}</span>
+                        </div>
+                        <div className="flex flex-col items-start bg-white shadow rounded-lg p-4 w-1/4">
+                            <p className="text-gray-800 font-medium">Jumlah Total Stok Buku: </p>
+                            <span className='text-2xl font-semibold'>{countStok}</span>
+                        </div>
                     </div>
-                    <button onClick={logout} className="px-4 py-2 bg-red-500 text-white rounded">
-                        Logout
-                    </button>
-                </div>
-                <div className="flex-1 p-6 bg-gray-50">
-                    {buku.length > 0 ? (
-                        <table className="table-fixed w-full">
-                            <thead>
-                                <tr>
-                                    <th className="px-4 py-2">Judul</th>
-                                    <th className="px-4 py-2">Pengarang</th>
-                                    <th className="px-4 py-2">Tahun</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {buku.map((book) => (
-                                    <tr key={book.ID}>
-                                        <td className="border px-4 py-2">{book.Judul}</td>
-                                        <td className="border px-4 py-2">{book.Penulis}</td>
-                                        <td className="border px-4 py-2">{book.TahunTerbit}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    ) : (
-                        <p className="text-gray-600 text-center">Tidak ada data buku tersedia.</p>
-                    )}
                 </div>
             </div>
         </div>
     );
 };
 
-export default DashboardPetugas;
+export default Dashboard;

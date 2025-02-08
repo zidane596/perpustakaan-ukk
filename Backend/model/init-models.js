@@ -18,24 +18,24 @@ function initModels(sequelize) {
   var ulasanbuku = _ulasanbuku(sequelize, DataTypes);
   var user = _user(sequelize, DataTypes);
 
-  kategoribuku_relasi.belongsTo(buku, { as: "Buku", foreignKey: "BukuID"});
-  buku.hasMany(kategoribuku_relasi, { as: "kategoribuku_relasis", foreignKey: "BukuID"});
-  koleksipribadi.belongsTo(buku, { as: "Buku", foreignKey: "BukuID"});
-  buku.hasMany(koleksipribadi, { as: "koleksipribadis", foreignKey: "BukuID"});
-  peminjaman.belongsTo(buku, { as: "Buku", foreignKey: "BukuID"});
-  buku.hasMany(peminjaman, { as: "peminjamans", foreignKey: "BukuID"});
-  ulasanbuku.belongsTo(buku, { as: "Buku", foreignKey: "BukuID"});
-  buku.hasMany(ulasanbuku, { as: "ulasanbukus", foreignKey: "BukuID"});
-  kategoribuku_relasi.belongsTo(kategoribuku, { as: "Kategori", foreignKey: "KategoriID"});
-  kategoribuku.hasMany(kategoribuku_relasi, { as: "kategoribuku_relasis", foreignKey: "KategoriID"});
-  user.belongsTo(role, { as: "Role", foreignKey: "RoleID"});
-  role.hasMany(user, { as: "users", foreignKey: "RoleID"});
-  koleksipribadi.belongsTo(user, { as: "User", foreignKey: "UserID"});
-  user.hasMany(koleksipribadi, { as: "koleksipribadis", foreignKey: "UserID"});
-  peminjaman.belongsTo(user, { as: "User", foreignKey: "UserID"});
-  user.hasMany(peminjaman, { as: "peminjamans", foreignKey: "UserID"});
-  ulasanbuku.belongsTo(user, { as: "User", foreignKey: "UserID"});
-  user.hasMany(ulasanbuku, { as: "ulasanbukus", foreignKey: "UserID"});
+kategoribuku_relasi.belongsTo(buku, { as: "Buku", foreignKey: "BukuID", onDelete: "CASCADE" });
+buku.hasMany(kategoribuku_relasi, { as: "kategoribuku_relasis", foreignKey: "BukuID", onDelete: "CASCADE" });
+koleksipribadi.belongsTo(buku, { as: "Buku", foreignKey: "BukuID", onDelete: "CASCADE" });
+buku.hasMany(koleksipribadi, { as: "koleksipribadis", foreignKey: "BukuID", onDelete: "CASCADE" });
+peminjaman.belongsTo(buku, { as: "Buku", foreignKey: "BukuID", onDelete: "CASCADE" });
+buku.hasMany(peminjaman, { as: "peminjamans", foreignKey: "BukuID", onDelete: "CASCADE" });
+ulasanbuku.belongsTo(buku, { as: "Buku", foreignKey: "BukuID", onDelete: "CASCADE" });
+buku.hasMany(ulasanbuku, { as: "ulasanbukus", foreignKey: "BukuID", onDelete: "CASCADE" });
+koleksipribadi.belongsTo(user, { as: "User", foreignKey: "UserID", onDelete: "CASCADE" });
+user.hasMany(koleksipribadi, { as: "koleksipribadis", foreignKey: "UserID", onDelete: "CASCADE" });
+peminjaman.belongsTo(user, { as: "User", foreignKey: "UserID", onDelete: "CASCADE" });
+user.hasMany(peminjaman, { as: "peminjamans", foreignKey: "UserID", onDelete: "CASCADE" });
+ulasanbuku.belongsTo(user, { as: "User", foreignKey: "UserID", onDelete: "CASCADE" });
+user.hasMany(ulasanbuku, { as: "ulasanbukus", foreignKey: "UserID", onDelete: "CASCADE" });
+user.belongsTo(role, { as: "Role", foreignKey: "RoleID" });
+role.hasMany(user, { as: "users", foreignKey: "RoleID" });
+kategoribuku_relasi.belongsTo(kategoribuku, { as: "Kategori", foreignKey: "KategoriID" });
+kategoribuku.hasMany(kategoribuku_relasi, { as: "kategoribuku_relasis", foreignKey: "KategoriID" });
 
   return {
     buku,
