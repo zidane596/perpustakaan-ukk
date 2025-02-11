@@ -5,7 +5,8 @@ import { useNavigate, useSearchParams } from "react-router";
 import { Sidebar } from "../component/Sidebar";
 import { Header } from "../component/Header";
 import { EditBukupopup } from "../component/EditBukupopup";
-import { AddBukuPopup } from "../component/AddBukupopup.js"; // Import AddBukuPopup
+import { AddBukuPopup } from "../component/AddBukupopup.js"; 
+import { DetailBukuPopup } from "../component/DetailBukupopup.js";
 
 const DaftarBuku = () => {
     const { token, logout, isLogin } = useAuth();
@@ -13,7 +14,8 @@ const DaftarBuku = () => {
     const [buku, setBuku] = useState([]);
     const [error, setError] = useState(null);
     const [selectedBuku, setSelectedBuku] = useState(null);
-    const [isAddingBuku, setIsAddingBuku] = useState(false); // State untuk popup tambah buku
+    const [isAddingBuku, setIsAddingBuku] = useState(false);
+    const [DetailBuku, setDetailBuku] = useState(null);
     const navigate = useNavigate();
 
     const [searchParams, setSearchParams] = useSearchParams();
@@ -144,9 +146,10 @@ const DaftarBuku = () => {
                                             <td className="px-6 py-3 whitespace-nowrap text-sm">{book.Penulis}</td>
                                             <td className="px-6 py-3 whitespace-nowrap text-sm">{book.Penerbit}</td>
                                             <td className="px-6 py-3 whitespace-nowrap text-sm">{book.TahunTerbit}</td>
-                                            <td className="items-center justify-center">
-                                                <div className="gap-2 flex flex-row">
+                                            <td className="flex justify-center items-center">
+                                                <div className="pt-1 flex justify-center gap-2">
                                                     <button className="py-1 px-2 border-2 border-yellow-500 text-sm text-yellow-500 rounded-xl" onClick={() => setSelectedBuku(book)}>Edit</button>
+                                                    <button className="py-1 px-2 border-2 border-blue-500 text-sm text-blue-500 rounded-xl" onClick={() => setDetailBuku(book)}>Detail</button>
                                                     <button className="py-1 px-2 border-2 border-red-500 text-sm text-red-500 rounded-xl" onClick={() => deleteBuku(book.BukuID)}>Hapus</button>
                                                 </div>
                                             </td>
@@ -171,10 +174,16 @@ const DaftarBuku = () => {
             )}
             {isAddingBuku && (
                 <AddBukuPopup
-                    onClose={() => setIsAddingBuku(false)} // Tutup popup
-                    onSave={addBuku} // Fungsi tambah buku
+                    onClose={() => setIsAddingBuku(false)} 
+                    onSave={addBuku}
                 />
             )}
+                            {DetailBuku && (
+                    <DetailBukuPopup
+                        buku={DetailBuku}
+                        onClose={() => setDetailBuku(null)}
+                    />
+                )}
         </div>
     );
 };

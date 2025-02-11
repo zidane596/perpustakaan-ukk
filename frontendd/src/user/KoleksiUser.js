@@ -45,7 +45,7 @@ const KoleksiUser = () => {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            setKoleksiData((prevData) => prevData.filter((buku) => buku.ID !== id));
+            setKoleksiData((prevData) => prevData.filter((koleksi) => koleksi.ID !== id));
         } catch (error) {
             setError('Error deleting collection: ' + error.message);
         }
@@ -62,7 +62,7 @@ const KoleksiUser = () => {
     return (
         <div className='flex flex-row'>
             <Sidebar />
-            <div className='flex flex-1 flex-col bg-gray-50 h-screen'>
+            <div className='flex flex-1 flex-col bg-gray-50 h-screen overflow-y-auto'>
                 <Header user={user} logout={logout} />
                 <div className="m-6 bg-white max-w-full h-full shadow-md rounded-lg overflow-hidden">
                     <div className="overflow-y-auto max-h-full">
@@ -79,16 +79,16 @@ const KoleksiUser = () => {
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-200">
                                 {koleksiData.length > 0 ? (
-                                    koleksiData.map((buku, index) => (
-                                        <tr key={buku.ID}>
+                                    koleksiData.map((koleksi, index) => (
+                                        <tr key={koleksi.ID}>
                                             <td className="px-6 py-3 whitespace-nowrap text-sm">{index + 1}</td>
-                                            <td className="px-6 py-3 whitespace-nowrap text-sm">{buku.Judul}</td>
-                                            <td className="px-6 py-3 whitespace-nowrap text-sm">{buku.Penulis}</td>
-                                            <td className="px-6 py-3 whitespace-nowrap text-sm">{buku.Penerbit}</td>
-                                            <td className="px-6 py-3 whitespace-nowrap text-sm">{buku.TahunTerbit}</td>
+                                            <td className="px-6 py-3 whitespace-nowrap text-sm">{koleksi.Buku.Judul}</td>
+                                                <td className="px-6 py-3 whitespace-nowrap text-sm">{koleksi.Buku.Penulis}</td>
+                                                <td className="px-6 py-3 whitespace-nowrap text-sm">{koleksi.Buku.Penerbit}</td>
+                                                <td className="px-6 py-3 whitespace-nowrap text-sm">{koleksi.Buku.TahunTerbit}</td>
                                             <td className="px-6 py-3 whitespace-nowrap text-sm">
                                                 <button
-                                                    onClick={() => handleDelete(buku.ID)}
+                                                    onClick={() => handleDelete(koleksi.ID)}
                                                     className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
                                                 >
                                                     Hapus
@@ -113,3 +113,4 @@ const KoleksiUser = () => {
 };
 
 export default KoleksiUser;
+

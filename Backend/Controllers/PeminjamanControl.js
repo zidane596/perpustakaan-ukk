@@ -28,7 +28,7 @@ const getBorrow = async (req, res) => {
 }
 
 const getBorrowByUser = async (req, res) => {
-  const { id } = req.params;
+  const id = req.user.id;
   try {
     const respons = await peminjaman.findAll({
       where: {
@@ -37,7 +37,7 @@ const getBorrowByUser = async (req, res) => {
       },
       include: [
         { model: user, as: 'User', attributes: ['Username'] },
-        { model: buku, as: 'Buku', attributes: ['Judul'] },
+        { model: buku, as: 'Buku', attributes: ['Judul', "Penulis"] },
       ],
     });
     res.status(200).json(respons);
@@ -47,15 +47,15 @@ const getBorrowByUser = async (req, res) => {
 }
 
 const addBorrow = async (req, res) => {
-  const { UserID, BukuID, TanggalPeminjaman, TanggalPengembalian, StatusPeminjaman } = req.body;
-
+  const userid = req.user.id
+  const { id : bookid } = req.params
   try {
     const respons = await peminjaman.create({
-      UserID,
-      BukuID,
-      TanggalPeminjaman,
-      TanggalPengembalian,
-      StatusPeminjaman,
+      UserID : userid,
+      BukuID : bookid,
+      TanggalPeminjaman : new Date(),
+      TanggalPengembalian : null,
+      StatusPeminjaman : "Pinjam",
     });
 
     res.status(201).json(respons);
@@ -65,14 +65,14 @@ const addBorrow = async (req, res) => {
 };
 
 const updateReturnBookByid = async (req, res) => {
-  const { id } = req.params;
-  const { PeminjamanID, TanggalPengembalian, StatusPeminjaman } = req.body;
+  const {id : bookid} = req.params;
+  const id = req.user.id;
 
   try {
     const respons = await peminjaman.findOne({
       where: {
-        UserID: id,
-        PeminjamanID,
+        BukuID: bookid,
+        UserID : id,
         StatusPeminjaman: 'Pinjam'
       },
     });
@@ -81,9 +81,8 @@ const updateReturnBookByid = async (req, res) => {
       return res.status(404).json({ message: 'Peminjaman tidak ditemukan' });
     }
 
-    const today = new Date()
     await respons.update({
-      TanggalPengembalian: today,
+      TanggalPengembalian: new Date(),
       StatusPeminjaman: 'Selesai',
     });
 

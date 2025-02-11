@@ -5,27 +5,19 @@ const { user, buku, koleksipribadi } = model.initModels(sequelize);
 
 
 const addKoleksiBuku = async (req, res) => {
+    const UserID = req.user.id;
+    const { id : bookid } = req.params;
     try {
-        const UserID = req.user.id; // Ambil ID user dari session atau token
-        const { BukuID } = req.body;
-
-        // Validasi buku
-        const bukuExists = await buku.findByPk(BukuID);
-        if (!bukuExists) {
-            return res.status(404).json({ message: 'Buku tidak ditemukan' });
-        }
-
-        // Tambahkan ke koleksi
         const [collection, created] = await koleksipribadi.findOrCreate({
-            where: { UserID, BukuID },
-            defaults: { UserID, BukuID },
+            where: { UserID, BukuID : bookid },
+            defaults: { UserID, BukuID : bookid },
         });
 
         if (!created) {
             return res.status(400).json({ message: 'Buku sudah ada di koleksi' });
         }
 
-        res.status(201).json({ message: 'Buku berhasil ditambahkan ke koleksi', collection });
+        res.status(201).json( collection );
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -48,12 +40,12 @@ const updateKoleksiBuku = async (req, res) => {
 } 
 
 const getUserKoleksi = async (req, res) => {
-    const { UserID } = req.params;
+    const id = req.user.id;
 
     try {
         const koleksi = await koleksipribadi.findAll({
-            where: { UserID },
-            include: [{ model: buku, attributes: ['id', 'title'] }],
+            where: { UserID : id },
+            include: [{ model: buku, as:"Buku", attributes: ['Judul', 'Penerbit', 'Penulis', 'TahunTerbit'] }],
         });
 
         if (!koleksi.length) {

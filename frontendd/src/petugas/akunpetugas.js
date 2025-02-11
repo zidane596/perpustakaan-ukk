@@ -5,7 +5,7 @@ import { Sidebar } from '../component/Sidebar';
 import { useAuth } from '../context/auth';
 
 const AkunPetugas = () => {
-    const { token, isLogin, logout, isRole } = useAuth();
+    const { token, isLogin, isRole } = useAuth();
     const [user, setUser] = useState({
         UserID: '',
         Username: '',

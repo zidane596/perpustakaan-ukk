@@ -5,7 +5,7 @@ const { addKoleksiBuku, getUserKoleksi, updateKoleksiBuku, deleteKoleksiBuku } =
 const router = express.Router();
 
 router.get('/koleksi', authenticateToken, getUserKoleksi);
-router.post('/koleksi/add', authenticateToken, addKoleksiBuku);
+router.post('/koleksi/add/:id', authenticateToken, addKoleksiBuku);
 router.put('/koleksi/:id', authenticateToken, updateKoleksiBuku);
 router.delete('/koleksi/:id', authenticateToken, deleteKoleksiBuku);
 

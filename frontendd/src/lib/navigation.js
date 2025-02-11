@@ -46,6 +46,12 @@ export const User = [
         icon : Beranda
     },
     {
+        key : 'daftar buku user',
+        label : 'Daftar buku',
+        path : '/daftar-buku',
+        icon : DaftarBuku
+    },
+    {
         key : 'peminjaman user',
         label : 'Peminjaman',
         path : '/peminjaman',
@@ -79,7 +85,7 @@ export const Petugas = [
     },
     {
         key : 'daftar buku petugas',
-        label : 'Koleksi Buku',
+        label : 'Daftar Buku',
         path : '/daftar-buku-petugas',
         icon : DaftarBuku
     },

@@ -57,6 +57,17 @@ const getUserProfile = async (req, res) => {
     }
 };
 
+const addUser = async (req, res) => {
+    const { Username, Email, Nama_Lengkap, Alamat, Password, RoleID } = req.body;
+    try {
+        const hashPassword = await bcrypt.hash(Password, 10);
+        const newUser = await user.create({ Username, Email, Nama_Lengkap, Alamat, Password: hashPassword, RoleID });
+        res.status(201).json({ message: 'User created successfully', newUser });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 const updateUserProfile = async (req, res) => {
     const { id } = req.params;
     const { Username, Email, Nama_Lengkap, Alamat, Password, RoleID } = req.body;
@@ -91,4 +102,4 @@ const deleteUser = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 }
-module.exports = { getCountUser, getAllUser, getUserProfile, updateUserProfile, deleteUser };
+module.exports = { getCountUser, getAllUser, getUserProfile, addUser, updateUserProfile, deleteUser };

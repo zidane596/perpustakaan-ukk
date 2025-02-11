@@ -7,6 +7,7 @@ export const AddAkunPopup = ({ onClose, onSave }) => {
         Nama_Lengkap: "",
         Alamat: "",
         RoleID: "",
+        Password: "",
     });
 
     const handleChange = (e) => {
@@ -100,6 +101,20 @@ export const AddAkunPopup = ({ onClose, onSave }) => {
                             <option value="2">Petugas</option>
                             <option value="3">User</option>
                         </select>
+                    </div>
+                    <div className="mb-4">
+                        <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="Alamat">
+                            Password
+                        </label>
+                        <input
+                            type="pasword"
+                            id="Password"
+                            name="Password"
+                            value={formData.Password}
+                            onChange={handleChange}
+                            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-200"
+                            required
+                        />
                     </div>
                     <div className="flex justify-end space-x-2">
                         <button

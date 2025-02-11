@@ -58,7 +58,7 @@ const DaftarAkun = () => {
 
     const addAkun = async (newData) => {
         try {
-            await axios.post("http://localhost:5000/api/user", newData, {
+            await axios.post("http://localhost:5000/api/adduser", newData, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setAddingAkun(false);
@@ -141,7 +141,7 @@ const DaftarAkun = () => {
                                             <td className="px-6 py-3 whitespace-nowrap text-sm">{user.Email}</td>
                                             <td className="px-6 py-3 whitespace-nowrap text-sm">{user.Role.RoleName}</td>
                                             <td className="flex items-center justify-center">
-                                                <div className="gap-2 flex flex-row">
+                                                <div className="pt-1 gap-2 flex flex-row">
                                                     <button className="py-1 px-2 border-2 border-yellow-500 text-sm text-yellow-500 rounded-xl" onClick={() => setSelectedAkun(user)}>Edit</button>
                                                     <button className="py-1 px-2 border-2 border-blue-500 text-sm text-blue-500 rounded-xl" onClick={() => setDetailAkun(user)}>Detail</button>
                                                     <button className="py-1 px-2 border-2 border-red-500 text-sm text-red-500 rounded-xl" onClick={() => deleteAkun(user.AkunID)}>Hapus</button>

@@ -2,7 +2,7 @@ const model = require('../model/init-models');
 const sequelize = require('../config/databases');
 const db = require('../config/databases');
 const { Op } = require('sequelize');
-const { buku, kategoribuku, kategoribuku_relasi } = model.initModels(sequelize);
+const { buku, kategoribuku, peminjaman, koleksipribadi,  user, ulasanbuku, kategoribuku_relasi } = model.initModels(sequelize);
 
 
 const getCountBuku = async (req, res) => {
@@ -29,7 +29,7 @@ const getAllBuku = async (req, res) => {
             include: [
                 {
                     model: kategoribuku_relasi,
-                    as: "kategoribuku_relasis", 
+                    as: "kategoribuku_relasis",
                     attributes: ["KategoriID"],
                     include: [
                         {
@@ -39,15 +39,42 @@ const getAllBuku = async (req, res) => {
                         },
                     ],
                 },
+                {
+                    model: peminjaman,
+                    as: "peminjamans",
+                    attributes: ["TanggalPeminjaman", "TanggalPengembalian", "StatusPeminjaman"],
+                    include: [
+                        {
+                            model: user,
+                            as: "User",
+                            attributes: ["Username", "Email"],
+                        },
+                    ],
+                },
+                {
+                    model: ulasanbuku,
+                    as: "ulasanbukus",
+                    attributes: ["Ulasan"],
+                    include: [
+                        {
+                            model: user,
+                            as: "User",
+                            attributes: ["Username"],
+                        },
+                    ],
+                },
             ],
             attributes: ["BukuID", "Judul", "Penulis", "Penerbit", "TahunTerbit", "Stok"],
-            logging: console.log, // Tambahkan untuk debug
-        });        
+        });
+        
         res.status(200).json(bukuData);
     } catch (error) {
+        console.error("Error fetching buku data:", error);
         res.status(500).json({ error: error.message });
     }
 };
+
+
 
 const getBukuById = async (req, res) => {
     const { id } = req.params;

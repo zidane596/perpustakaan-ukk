@@ -37,7 +37,7 @@ const Register = async (req, res) => {
             Email,
             Nama_Lengkap,
             Alamat,
-            RoleID: 1,
+            RoleID: 3,
         });
 
         const { Password: _, ...userWithoutPassword } = newUser.toJSON();

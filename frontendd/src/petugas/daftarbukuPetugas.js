@@ -93,7 +93,7 @@ const DaftarBukuPetugas = () => {
             <div className="flex flex-col overflow-y-auto flex-1 bg-gray-50">
                 <Header user={user} logout={logout}/>
                     <div className='flex flex-row items-center justify-between mx-6  rounded-lg'>
-                        <Link to="/add-buku-admin" className='bg-blue-500 text-white px-4 py-2 rounded-lg'>Tambah Buku</Link>
+                        <Link className='bg-blue-500 text-white px-4 py-2 rounded-lg'>Tambah Buku</Link>
                             <input
                                 type="text"
                                 placeholder="Search"
@@ -116,9 +116,9 @@ const DaftarBukuPetugas = () => {
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-200">
                             {filteredItems.length > 0 ? (
-                                filteredItems.map((book) => (
+                                filteredItems.map((book, index) => (
                                     <tr key={book.BukuID}>
-                                        <td className="px-6 py-3 text-left text-sm whitespace-nowrap">{book.BukuID}</td>
+                                        <td className="px-6 py-3 text-left text-sm whitespace-nowrap">{index + 1}</td>
                                         <td className="px-6 py-3 text-left text-sm whitespace-nowrap">{book.Judul}</td>
                                         <td className="px-6 py-3 text-left text-sm whitespace-nowrap">{book.Penulis}</td>
                                         <td className="px-6 py-3 text-left text-sm whitespace-nowrap">{book.Penerbit}</td>

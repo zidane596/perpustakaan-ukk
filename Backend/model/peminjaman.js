@@ -29,7 +29,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     TanggalPengembalian: {
       type: DataTypes.DATEONLY,
-      allowNull: false
+      allowNull: true
     },
     StatusPeminjaman: {
       type: DataTypes.STRING(50),

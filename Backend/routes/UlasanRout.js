@@ -6,6 +6,6 @@ const router = express.Router();
 
 router.get('/ulasan', authenticateToken, getUlasan);
 router.get('/ulasan/buku/:id', authenticateToken, getUlasanByBukuID);
-router.post('/ulasan/tambah', authenticateToken, addUlasan);
+router.post('/ulasan/tambah/:id', authenticateToken, addUlasan);
 
 module.exports = router;
