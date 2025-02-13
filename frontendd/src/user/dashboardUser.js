@@ -12,90 +12,97 @@ const DashboardUser = () => {
     const [historyBorrow, setHistoryBorrow] = useState([]);
     const navigate = useNavigate();
 
-    const fetchCountBorrow = useCallback(async () => {
-        try {
-            const response = await axios.get('http://localhost:5000/api/countborrow', {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            setCountBorrow(response.data.count || 0);
-        } catch (error) {
-            console.error('Error fetching count borrow:', error.message);
-        }
-    }, [token]);
-
-    const fetchHistoryBorrow = useCallback(async () => {
-        try {
-            const response = await axios.get('http://localhost:5000/api/historyborrow', {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            // Filter hanya yang statusnya selesai
-            const filteredHistory = response.data.filter(item => item.Status === 'Selesai');
-            setHistoryBorrow(filteredHistory);
-        } catch (error) {
-            console.error('Error fetching history borrow:', error.message);
-        }
-    }, [token]);
-
-    const fetchUser = useCallback(async () => {
-        try {
-            const response = await axios.get('http://localhost:5000/api/user', {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            setUser(response.data);
-        } catch (error) {
-            console.error('Error fetching user:', error.message);
-        }
-    }, [token]);
-
     useEffect(() => {
         if (!isLogin || isRole !== 'User') {
             logout();
             navigate('/login');
             return;
         }
+
+        const fetchCountBorrow = async () => {
+            try {
+                const response = await axios.get('http://localhost:5000/api/countborrowbyid', {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                setCountBorrow(response.data.count || 0);
+            } catch (error) {
+                console.error('Error fetching count borrow:', error.message);
+            }
+        };
+
+        const fetchHistoryBorrow = async () => {
+            try {
+                const response = await axios.get('http://localhost:5000/api/borrow/history', {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                setHistoryBorrow(response.data);
+            } catch (error) {
+                console.error('Error fetching history borrow:', error.message);
+            }
+        };
+
+        const fetchUser = async () => {
+            try {
+                const response = await axios.get('http://localhost:5000/api/auth/me', {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                setUser(response.data);
+            } catch (error) {
+                console.error('Error fetching user:', error.message);
+            }
+        };
+
         fetchUser();
         fetchCountBorrow();
         fetchHistoryBorrow();
-    }, [fetchUser, fetchCountBorrow, fetchHistoryBorrow, isLogin, isRole, logout, navigate]);
+    }, [isLogin, isRole, logout, navigate, token]);
 
     return (
-        <div className='flex flex-row h-screen w-screen'>
+        <div className='flex h-screen bg-gray-100'>
             <Sidebar />
-            <div className="flex flex-col flex-1 bg-gray-50">
+            <div className='flex flex-1 flex-col overflow-y-auto'>
                 <Header user={user} logout={logout} />
-                <div className="flex flex-col p-6 gap-4">
-                    <div className='flex flex-row justify-between gap-4'>
-                        <div className="flex flex-col items-start bg-white shadow rounded-lg p-4 w-1/4">
-                            <p className="text-gray-800 font-medium">Jumlah Peminjaman: </p>
-                            <span className='text-2xl font-semibold'>{countBorrow}</span>
+                <main className="p-6">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div className="flex flex-col items-center bg-blue-600 text-white rounded-lg p-6 shadow-md">
+                            <p className="text-lg font-medium">Jumlah Peminjaman</p>
+                            <span className='text-4xl font-bold mt-2'>{countBorrow}</span>
+                        </div>
+                        <div className="flex flex-col items-center bg-blue-600 text-white rounded-lg p-6 shadow-md">
+                            <p className="text-lg font-medium">Jumlah Peminjaman</p>
+                            <span className='text-4xl font-bold mt-2'>{countBorrow}</span>
                         </div>
                     </div>
-                    <div className="bg-white shadow rounded-lg p-6 mt-4">
-                        <h2 className="text-xl font-semibold text-gray-800 mb-4">Riwayat Peminjaman (Selesai)</h2>
+                    <div className="bg-white shadow-md rounded-lg p-6 mt-6 overflow-y-auto max-h-screen">
+                        <h2 className="text-2xl sticky top-0 font-semibold text-gray-800 mb-4 border-b pb-2">Riwayat Peminjaman (Selesai)</h2>
                         {historyBorrow.length > 0 ? (
-                            <table className="table-fixed w-full">
-                                <thead>
-                                    <tr>
-                                        <th className="px-4 py-2">Judul Buku</th>
-                                        <th className="px-4 py-2">Tanggal Peminjaman</th>
-                                        <th className="px-4 py-2">Tanggal Pengembalian</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {historyBorrow.map((history) => (
-                                        <tr key={history.ID}>
-                                            <td className="border px-4 py-2">{history.JudulBuku}</td>
-                                            <td className="border px-4 py-2">{history.TanggalPinjam}</td>
-                                            <td className="border px-4 py-2">{history.TanggalKembali}</td>
+                            <div className="overflow-x-auto">
+                                <table className="table-auto w-full text-left border-collapse">
+                                    <thead className="bg-blue-500 text-white sticky top-0">
+                                        <tr>
+                                            <th className="px-6 py-3 text-xs text-center text-white font-medium uppercase tracking-wider">No</th>
+                                            <th className="px-6 py-3 text-xs text-center text-white font-medium uppercase tracking-wider">Judul Buku</th>
+                                            <th className="px-6 py-3 text-xs text-center text-white font-medium uppercase tracking-wider">Tanggal Peminjaman</th>
+                                            <th className="px-6 py-3 text-xs text-center text-white font-medium uppercase tracking-wider">Tanggal Pengembalian</th>
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody className="bg-white divide-y divide-gray-200">
+                                        {historyBorrow.map((history, index) => (
+                                            <tr key={history.ID}>
+                                                <td className="px-6 py-3 text-center whitespace-nowrap text-sm">{index + 1}</td>
+                                                <td className="px-6 py-3 text-center whitespace-nowrap text-sm">{history.Buku.Judul}</td>
+                                                <td className="px-6 py-3 text-center whitespace-nowrap text-sm">{history.TanggalPeminjaman}</td>
+                                                <td className="px-6 py-3 text-center whitespace-nowrap text-sm">{history.TanggalPengembalian}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
                         ) : (
                             <p className="text-gray-600 text-center">Tidak ada riwayat peminjaman selesai tersedia.</p>
                         )}
                     </div>
-                </div>
+                </main>
             </div>
         </div>
     );

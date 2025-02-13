@@ -14,13 +14,13 @@ export const AddBukuPopup = ({ onClose, onSave }) => {
         const { name, value } = e.target;
         setFormData({
             ...formData,
-            [name]: name === "KategoriID" ? value.split(",") : value, // Array untuk KategoriID
+            [name]: name === "KategoriID" ? value.split(",") : value,
         });
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        onSave(formData); // Panggil fungsi onSave dari props
+        onSave(formData);
     };
 
     return (

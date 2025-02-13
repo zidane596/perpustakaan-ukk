@@ -2,14 +2,14 @@ import React, { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "../context/auth";
 import { useNavigate, useSearchParams } from "react-router";
-import { Sidebar } from "../component/Sidebar";
-import { Header } from "../component/Header";
-import { EditBukupopup } from "../component/EditBukupopup";
+import { Sidebar } from "../component/Sidebar.js";
+import { Header } from "../component/Header.js";
+import { EditBukupopup } from "../component/EditBukupopup.js";
 import { AddBukuPopup } from "../component/AddBukupopup.js"; 
 import { DetailBukuPopup } from "../component/DetailBukupopup.js";
 
 const DaftarBuku = () => {
-    const { token, logout, isLogin } = useAuth();
+    const { token, logout, isLogin, isRole} = useAuth();
     const [user, setUser] = useState({});
     const [buku, setBuku] = useState([]);
     const [error, setError] = useState(null);
@@ -23,7 +23,6 @@ const DaftarBuku = () => {
 
     const [query, setQuery] = useState(queryFromUrl);
 
-    // Fetch user data
     const fetchUser = useCallback(async () => {
         try {
             const response = await axios.get("http://localhost:5000/api/user", {
@@ -35,7 +34,6 @@ const DaftarBuku = () => {
         }
     }, [token]);
 
-    // Fetch all books
     const fetchBuku = useCallback(async () => {
         try {
             const response = await axios.get("http://localhost:5000/api/buku", {
@@ -47,7 +45,6 @@ const DaftarBuku = () => {
         }
     }, [token]);
 
-    // Delete a book
     const deleteBuku = async (id) => {
         try {
             await axios.delete(`http://localhost:5000/api/buku/${id}`, {
@@ -59,7 +56,6 @@ const DaftarBuku = () => {
         }
     };
 
-    // Save updated book data
     const saveBuku = async (id, updatedData) => {
         try {
             await axios.put(`http://localhost:5000/api/buku/${id}`, updatedData, {
@@ -90,13 +86,13 @@ const DaftarBuku = () => {
     );
 
     useEffect(() => {
-        if (!isLogin) {
+        if (!isLogin || (isRole !== 'Admin' && isRole !== 'Petugas')) {
             navigate("/login");
             return;
         }
         fetchUser();
         fetchBuku();
-    }, [fetchUser, fetchBuku, navigate, isLogin]);
+    }, [fetchUser, fetchBuku, navigate, isLogin, isRole]);
 
     useEffect(() => {
         setSearchParams(query ? { q: query } : {});

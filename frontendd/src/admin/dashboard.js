@@ -71,7 +71,7 @@ const Dashboard = () => {
     }, [token]);
 
     useEffect(() => {
-        if (!isLogin || isRole !== 'Admin') {
+        if (!isLogin || (isRole !== 'Admin' && isRole !== 'Petugas')) {
             navigate('/login');
             return;
         } 

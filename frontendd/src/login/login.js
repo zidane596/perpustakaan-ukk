@@ -14,10 +14,8 @@ const Login = () => {
 
   useEffect(() => {
     if (isLogin) {
-        if (isRole === 'Admin') {
+        if (isRole === 'Admin' || isRole === 'Petugas') {
             navigate('/beranda-admin');  // Arahkan ke halaman admin
-        } else if (isRole === 'Petugas') {
-            navigate('/beranda-petugas');  // Arahkan ke halaman petugas
         } else if (isRole === 'User') {
             navigate('/beranda');  // Arahkan ke halaman user
         }

@@ -5,6 +5,7 @@ import { useNavigate, useSearchParams } from "react-router";
 import { Sidebar } from "../component/Sidebar";
 import { Header } from "../component/Header";
 import { DetailBukuPopup } from "../component/DetailBukuUserpopup";
+import { IoMenu  } from "react-icons/io5";
 
 const DaftarBukuu = () => {
     const { token, isLogin } = useAuth();
@@ -12,15 +13,12 @@ const DaftarBukuu = () => {
     const [buku, setBuku] = useState([]);
     const [error, setError] = useState(null);
     const [DetailBuku, setDetailBuku] = useState(false);
-    const [loading, setLoading] = useState(false);
-    const [message, setMessage] = useState("");
-
     const navigate = useNavigate();
+
     const [searchParams, setSearchParams] = useSearchParams();
     const queryFromUrl = searchParams.get("q") || "";
     const [query, setQuery] = useState(queryFromUrl);
 
-    // Fetch user data
     const fetchUser = useCallback(async () => {
         try {
             const response = await axios.get("http://localhost:5000/api/user", {
@@ -32,7 +30,6 @@ const DaftarBukuu = () => {
         }
     }, [token]);
 
-    // Fetch all books
     const fetchBuku = useCallback(async () => {
         try {
             const response = await axios.get("http://localhost:5000/api/buku", {
@@ -100,7 +97,7 @@ const DaftarBukuu = () => {
                                             <td className="px-6 py-3 whitespace-nowrap text-sm">{book.Penerbit}</td>
                                             <td className="px-6 py-3 whitespace-nowrap text-sm">{book.TahunTerbit}</td>
                                             <td className="px-6 py-3 whitespace-nowrap text-sm">
-                                                <button onClick={() => setDetailBuku(book)}>Detail</button>
+                                                <button onClick={() => setDetailBuku(book)}><IoMenu  /></button>
                                                 </td>
                                         </tr>
                                     ))

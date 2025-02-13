@@ -1,11 +1,21 @@
 const model = require('../model/init-models');
 const sequelize = require('../config/databases');
 const db = require('../config/databases');
+const { where } = require('sequelize');
 const { peminjaman, user, buku } = model.initModels(sequelize);
 
 const getCountBorrow = async (req, res) => {
   try {
     const count = await peminjaman.count({});
+    res.status(200).json({count});
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+}
+const getCountBorrowbyId = async (req, res) => {
+  const id = req.user.id;
+  try {
+    const count = await peminjaman.count({where : {UserID: id}});
     res.status(200).json({count});
   } catch (err) {
     res.status(500).json({ message: 'Server error', error: err.message });
@@ -94,14 +104,14 @@ const updateReturnBookByid = async (req, res) => {
 }
 
 const getHistory = async (req, res) => {
-  const { userId } = req.params;
+  const id = req.user.id;
 
   try {
     const respons = await peminjaman.findAll({
-      where: { UserID: userId },
+      where: { UserID: id, StatusPeminjaman : "Selesai" },
       include: [
-        { model: user, attributes: ['UserID', 'name'] },
-        { model: buku, attributes: ['BukuID', 'title'] },
+        { model: user, as: 'User', attributes: [ 'Username'] },
+        { model: buku, as: 'Buku', attributes: [ 'Judul', 'Penulis', 'Penerbit', 'TahunTerbit'] },
       ],
     });
 
@@ -109,10 +119,10 @@ const getHistory = async (req, res) => {
       return res.status(404).json({ message: 'No respons found' });
     }
 
-    res.status(200).json({ message: 'Loan history retrieved', respons });
+    res.status(200).json(respons);
   } catch (err) {
     res.status(500).json({ message: 'Server error', error: err.message });
   }
 };
 
-module.exports = { getCountBorrow, getBorrow, getBorrowByUser, addBorrow, updateReturnBookByid, getHistory };
+module.exports = { getCountBorrow, getCountBorrowbyId, getBorrow, getBorrowByUser, addBorrow, updateReturnBookByid, getHistory };

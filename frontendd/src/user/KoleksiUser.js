@@ -45,7 +45,7 @@ const KoleksiUser = () => {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            setKoleksiData((prevData) => prevData.filter((koleksi) => koleksi.ID !== id));
+            fetchKoleksi();
         } catch (error) {
             setError('Error deleting collection: ' + error.message);
         }
@@ -88,7 +88,7 @@ const KoleksiUser = () => {
                                                 <td className="px-6 py-3 whitespace-nowrap text-sm">{koleksi.Buku.TahunTerbit}</td>
                                             <td className="px-6 py-3 whitespace-nowrap text-sm">
                                                 <button
-                                                    onClick={() => handleDelete(koleksi.ID)}
+                                                    onClick={() => handleDelete(koleksi.BukuID)}
                                                     className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
                                                 >
                                                     Hapus
@@ -113,4 +113,3 @@ const KoleksiUser = () => {
 };
 
 export default KoleksiUser;
-

@@ -5,12 +5,14 @@ import { useAuth } from '../context/auth.js';
 import { Sidebar } from '../component/Sidebar.js';
 import { Header } from '../component/Header.js';
 import { EditBukupopup } from '../component/EditBukupopup.js';
+import { DetailBukuPopup } from '../component/DetailBukupopup.js';
 
 const DaftarBukuPetugas = () => {
     const { token, logout, isLogin } = useAuth();
     const [user, setUser] = useState({});
     const [buku, setBuku] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null);
+    const [DetailUser, setDetailUser] = useState(null);
     const navigate = useNavigate();
 
     const [searchParams, setSearchParams] = useSearchParams();
@@ -128,7 +130,7 @@ const DaftarBukuPetugas = () => {
                                                 <button className="py-1 px-2 text-sm border-2 border-blue-500 rounded-xl">Aksi</button>
                                                 <div className="dropdown-content">
                                                     <button onClick={() => setSelectedUser(book)}>Edit</button>
-                                                    <button>Detail</button>
+                                                    <button onClick={() => setDetailUser(book)}>Detail</button>
                                                     <button onClick={() => deleteBuku(book.BukuID)}>Hapus</button>
                                                 </div>
                                             </div>
@@ -148,6 +150,12 @@ const DaftarBukuPetugas = () => {
                     buku={selectedUser}
                     onClose={() => setSelectedUser(null)}
                     onSave={saveUser}
+                     />
+                )}
+                {DetailUser && (
+                    <DetailBukuPopup 
+                    buku={DetailUser}
+                    onClose={() => setDetailUser(null)}
                      />
                 )}
             </div>

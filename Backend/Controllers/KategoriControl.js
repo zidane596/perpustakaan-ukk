@@ -3,12 +3,12 @@ const sequelize = require('../config/databases');
 const { kategoribuku_relasi, kategoribuku } = model.initModels(sequelize);
 
 const createkategoribuku = async (req, res) => {
-    const { Namakategori } = req.body;
-    if (!Namakategori) {
-        return res.status(400).json({ error: "Namakategori tidak boleh kosong." });
+    const { NamaKategori } = req.body;
+    if (!NamaKategori) {
+        return res.status(400).json({ error: "NamaKategori tidak boleh kosong." });
     }
     try {
-        const bukuData = await kategoribuku.create({ Namakategori });
+        const bukuData = await kategoribuku.create({ NamaKategori });
         res.status(201).json(bukuData);
     } catch (error) {
         console.error("Error createkategoribuku:", error);
@@ -17,9 +17,8 @@ const createkategoribuku = async (req, res) => {
 };
 
 const getBukuByKategori = async (req, res) => {
-    const { KategoriID } = req.params;
     try {
-        const bukuData = await kategoribuku_relasi.findAll({ where: { KategoriID } });
+        const bukuData = await kategoribuku.findAll();
         res.status(200).json(bukuData);
     } catch (error) {
         console.error("Error getBukuByKategori:", error);
@@ -51,6 +50,27 @@ const getKategoriBukuRelasiById = async (req, res) => {
     }
 };
 
+const updatekategori = async (req, res) => {
+    const { id } = req.params; 
+    const { NamaKategori } = req.body; 
+
+    try {
+        const respons = await kategoribuku.update(
+            { NamaKategori },
+            { where: { KategoriID: id } }
+        );
+
+        if (respons[0] === 0) {
+            return res.status(404).json({ message: "Kategori tidak ditemukan" });
+        }
+
+        res.status(200).json({ message: "Kategori berhasil diperbarui" });
+    } catch (error) {
+        res.status(500).json({ message: "Terjadi kesalahan", error: error.message });
+    }
+};
+
+
 const createkategoribuku_relasi = async (req, res) => {
     const { BukuID, KategoriID } = req.body;
     if (!BukuID || !KategoriID) {
@@ -65,4 +85,21 @@ const createkategoribuku_relasi = async (req, res) => {
     }
 };
 
-module.exports = { createkategoribuku, getBukuByKategori, createkategoribuku_relasi, getKategoriBukuRelasi, getKategoriBukuRelasiById };
+const deletekategori = async (req, res) => {
+    const { id } = req.params;
+    if (!id) {
+        return res.status(400).json({ error: "KategoriID wajib diisi." });
+    }
+    try {
+        const bukuData = await kategoribuku.destroy({ where: { KategoriID: id } });
+        if (!bukuData) {
+            return res.status(404).json({ message: 'Kategori not found' });
+        }
+        res.status(200).json({ message: 'Kategori deleted successfully' });
+    } catch (error) {
+        console.error("Error deletekategori:", error);
+        res.status(500).json({ error: error.message });
+    }
+};
+
+module.exports = { createkategoribuku, getBukuByKategori, createkategoribuku_relasi, updatekategori, getKategoriBukuRelasi, getKategoriBukuRelasiById, deletekategori };

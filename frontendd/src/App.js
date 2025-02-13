@@ -6,15 +6,13 @@ import Dashboard from './admin/dashboard.js';
 import DaftarBuku from './admin/daftarbuku.js';
 import Peminjaman from './admin/peminjaman.js';
 import DaftarAkun from './admin/DaftarAkun.js';
-import DashboardPetugas from './petugas/dashboardPetugas.js';
 import DashboardUser from './user/dashboardUser.js';
 import PeminjamanUser from './user/PeminjamanUser.js';
 import KoleksiUser from './user/KoleksiUser.js';
 import AkunUser from './user/AkunUser.js';
-import PeminjamanPetugas from './petugas/PeminjamanPetugas.js';
-import DaftarBukuPetugas from './petugas/daftarbukuPetugas.js';
-import AkunPetugas from './petugas/akunpetugas.js';
+import AkunPetugas from './admin/akunpetugas.js';
 import DaftarBukuu from './user/DaftarBukuUser.js';
+import DaftarKategori from './admin/kategori.js';
 
 const App = () => {
   return (
@@ -27,12 +25,10 @@ const App = () => {
       <Route path="/peminjaman-admin" element={<Peminjaman />} />
       <Route path="/daftar-buku-admin" element={<DaftarBuku />} />
       <Route path="/daftar-user-admin" element={<DaftarAkun />} />
+      <Route path="/daftar-kategori-admin" element={<DaftarKategori />} />
 
 
       {/* Petugas /> */}
-      <Route path="/beranda-petugas" element={<DashboardPetugas />} />
-      <Route path="/peminjaman-petugas" element={<PeminjamanPetugas />} />
-      <Route path="/daftar-buku-petugas" element={<DaftarBukuPetugas />} />
       <Route path="/akun-petugas" element={<AkunPetugas />} />
 
       {/* User /> */}

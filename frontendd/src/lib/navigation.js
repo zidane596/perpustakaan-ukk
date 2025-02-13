@@ -1,7 +1,6 @@
 const Beranda = require("../imag/Beranda.png");
 const Peminjaman = require("../imag/Peminjaman.png");
 const DaftarBuku = require("../imag/DaftarBuku.png");
-const Laporan = require("../imag/Laporan.png");
 const Akun = require("../imag/Akun.png");
 
 export const Admin = [
@@ -30,12 +29,11 @@ export const Admin = [
         icon : DaftarBuku
     },
     {
-        key : 'laporan admin',
-        label : 'Laporan',
-        path : '/laporan-admin',
-        icon : Laporan
+        key : 'daftar kategori admin',
+        label : 'Daftar Kategori',
+        path : '/daftar-kategori-admin',
+        icon : DaftarBuku
     }
-
 ]
 
 export const User = [
@@ -72,21 +70,33 @@ export const User = [
 ]
 export const Petugas = [
     {
-        key : 'beranda petugas',
+        key : 'beranda admin',
         label : 'Beranda',
-        path : '/beranda-petugas',  
-        icon : Beranda
+        path : '/beranda-admin',
+        icon : Beranda,
     },
     {
-        key : 'peminjaman petugas',
+        key : 'peminjaman admin',
         label : 'Peminjaman',
-        path : '/peminjaman-petugas',
+        path : '/peminjaman-admin',
         icon : Peminjaman
     },
     {
-        key : 'daftar buku petugas',
+        key : 'daftar akun admin',
+        label : 'Daftar Akun',
+        path : '/daftar-user-admin',
+        icon : Akun
+    },
+    {
+        key : 'daftar buku admin',
         label : 'Daftar Buku',
-        path : '/daftar-buku-petugas',
+        path : '/daftar-buku-admin',
+        icon : DaftarBuku
+    },
+    {
+        key : 'daftar kategori admin',
+        label : 'Daftar Kategori',
+        path : '/daftar-kategori-admin',
         icon : DaftarBuku
     },
     {

@@ -74,8 +74,6 @@ const getAllBuku = async (req, res) => {
     }
 };
 
-
-
 const getBukuById = async (req, res) => {
     const { id } = req.params;
     try {

@@ -59,10 +59,10 @@ const getUserKoleksi = async (req, res) => {
 };
 
 const deleteKoleksiBuku = async (req, res) => {
-    const { id } = req.params;
-
+    const userid = req.user.id;
+    const { id : bookid } = req.params;
     try {
-        const koleksi = await koleksipribadi.findOne({ where: { id } });
+        const koleksi = await koleksipribadi.findOne({ where: { userid, BukuID : bookid } });
         if (!koleksi) {
             return res.status(404).json({ message: 'Collection not found' });
         }

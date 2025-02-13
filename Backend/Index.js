@@ -8,6 +8,7 @@ const koleksiRoutes = require('./routes/KoleksiRout.js');
 const ulasanRoutes = require('./routes/UlasanRout.js');
 const userRoutes = require('./routes/UserRout.js');
 const peminjamanRoutes = require('./routes/PeminjamanRout.js');
+const generateraport = require('./routes/generateraportRout.js');
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -27,6 +28,7 @@ app.use('/api', koleksiRoutes);
 app.use('/api', peminjamanRoutes);
 app.use('/api', ulasanRoutes);
 app.use('/api', userRoutes);
+app.use('/api', generateraport);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
